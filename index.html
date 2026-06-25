@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overstimulated Clicker</title>
+  <title>Stimulation</title>
   <style>
     :root{
-      --bg:#081019;
-      --text:#f7f8fc;
-      --muted:#9ca7b8;
-      --panel:rgba(12,17,26,.86);
-      --panel2:rgba(18,24,36,.92);
+      --bg:#090d15;
+      --panel:rgba(14,18,26,.88);
+      --panel2:rgba(18,24,35,.94);
+      --text:#f6f8fb;
+      --muted:#9aa5b5;
       --line:rgba(255,255,255,.08);
       --accent:#7c5cff;
       --accent2:#00d4ff;
@@ -19,101 +19,131 @@
       --danger:#ff5c7a;
       --shadow:0 24px 60px rgba(0,0,0,.45);
     }
+
     *{box-sizing:border-box}
     html,body{
       margin:0;
       min-height:100%;
       background:
-        radial-gradient(circle at top,#152033 0,#0a101a 50%,#05070a 100%);
+        radial-gradient(circle at top,#161d2a 0,#0b111a 52%,#05070b 100%);
       color:var(--text);
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       overflow-x:hidden;
     }
+
     body::before{
       content:"";
       position:fixed;
       inset:0;
       pointer-events:none;
-      opacity:.18;
+      opacity:.16;
       background-image:
-        linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);
-      background-size:52px 52px;
-      mask-image:radial-gradient(circle at center,black 34%,transparent 94%);
+        linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+      background-size:54px 54px;
+      mask-image:radial-gradient(circle at center,black 34%,transparent 95%);
     }
-    .wrap{
-      max-width:1320px;
-      margin:0 auto;
+
+    .app{
+      min-height:100vh;
       padding:22px;
       position:relative;
     }
+
     .topbar{
+      max-width:1160px;
+      margin:0 auto 16px;
       display:flex;
       justify-content:space-between;
-      align-items:center;
       gap:16px;
+      align-items:center;
       flex-wrap:wrap;
-      margin-bottom:16px;
     }
-    .brand{display:flex;align-items:center;gap:12px}
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
+    }
+
     .logo{
-      width:54px;height:54px;border-radius:16px;
+      width:46px;height:46px;border-radius:14px;
       display:grid;place-items:center;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
+      font-size:24px;
       box-shadow:var(--shadow);
-      font-size:26px;
     }
+
     h1{
       margin:0;
-      font-size:clamp(24px,3.2vw,40px);
+      font-size:clamp(22px,2.5vw,34px);
       letter-spacing:-.02em;
     }
+
     .sub{
       margin:4px 0 0;
       color:var(--muted);
-      font-size:14px;
+      font-size:13px;
     }
+
     .stats{
       display:flex;
-      flex-wrap:wrap;
       gap:10px;
+      flex-wrap:wrap;
       justify-content:flex-end;
     }
+
     .chip{
-      padding:10px 14px;
+      padding:9px 13px;
       border-radius:999px;
       background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--line);
       font-weight:800;
       backdrop-filter:blur(10px);
+      font-size:13px;
     }
-    .grid{
+
+    .shell{
+      max-width:1160px;
+      margin:0 auto;
       display:grid;
-      grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr);
+      grid-template-columns:minmax(0,1fr) 0;
       gap:18px;
       align-items:start;
+      transition:grid-template-columns .35s ease;
     }
-    .card{
-      background:var(--panel);
-      border:1px solid rgba(255,255,255,.08);
+
+    .shell.show-side{
+      grid-template-columns:minmax(0,1fr) 320px;
+    }
+
+    .stage{
+      position:relative;
+      min-height:calc(100vh - 122px);
       border-radius:24px;
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(14px);
+      background:rgba(9,13,20,.18);
+      overflow:hidden;
     }
-    .main{
-      padding:24px;
-      min-height:680px;
+
+    .mainCard{
+      min-height:calc(100vh - 122px);
+      border-radius:24px;
+      background:transparent;
       position:relative;
       overflow:hidden;
     }
-    .memezone{
-      position:relative;
+
+    .center{
+      min-height:calc(100vh - 122px);
       display:grid;
       place-items:center;
-      min-height:410px;
+      padding:24px 18px 34px;
+      position:relative;
     }
+
     .clicker{
-      width:min(74vw,340px);
+      width:min(76vw,350px);
       aspect-ratio:1/1;
       border:none;
       border-radius:34px;
@@ -121,206 +151,254 @@
       user-select:none;
       font-weight:1000;
       color:#111;
-      font-size:clamp(42px,8vw,68px);
+      font-size:clamp(44px,8vw,68px);
       background:linear-gradient(135deg,#ff6b6b,#ffb86b 55%,#ffd93d);
-      box-shadow:0 18px 50px rgba(255,131,87,.45), inset 0 -10px 20px rgba(0,0,0,.15);
+      box-shadow:0 18px 50px rgba(255,131,87,.42), inset 0 -10px 20px rgba(0,0,0,.15);
       transition:transform .08s ease,filter .2s ease;
+      z-index:3;
     }
+
     .clicker:hover{filter:saturate(1.1) brightness(1.03)}
     .clicker:active{transform:scale(.97) rotate(-1deg)}
-    .caption{
-      text-align:center;
-      color:var(--muted);
+
+    .hint{
       margin-top:14px;
+      color:var(--muted);
+      text-align:center;
       font-size:14px;
+      letter-spacing:.01em;
       min-height:20px;
     }
-    .floaters,.chaosLayer,.dvdLayer,.titleLayer,.notifLayer,.oceanLayer{
+
+    .floaters,.dvdLayer,.chaosLayer,.overlayLayer,.titleLayer{
       position:absolute;
       inset:0;
       pointer-events:none;
     }
+
     .floater{
       position:absolute;
       font-weight:900;
       font-size:18px;
       opacity:0;
-      animation:rise 1.05s ease-out forwards;
-      text-shadow:0 2px 10px rgba(0,0,0,.35);
+      animation:rise 1.04s ease-out forwards;
+      text-shadow:0 2px 10px rgba(0,0,0,.4);
     }
+
     @keyframes rise{
       0%{transform:translateY(0) scale(.9);opacity:0}
       20%{opacity:1}
       100%{transform:translateY(-110px) scale(1.15);opacity:0}
     }
-    .mini{
-      padding:16px;
-      border-radius:20px;
+
+    .miniBar{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:16px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      z-index:2;
+      width:min(92vw,680px);
+    }
+
+    .miniCard{
+      padding:12px 14px;
+      border-radius:16px;
       background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--line);
+      color:#dbe5f2;
+      backdrop-filter:blur(12px);
+      font-size:13px;
+      min-width:150px;
+      text-align:center;
     }
-    .bottomRow{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-      margin-top:14px;
-    }
-    .sectionTitle{
-      margin:0 0 8px;
-      font-size:18px;
-    }
+
     .meter{
-      height:14px;
+      height:13px;
       border-radius:999px;
       background:rgba(255,255,255,.08);
       overflow:hidden;
-      margin-top:10px;
+      margin-top:9px;
     }
+
     .bar{
       height:100%;
       width:0%;
       background:linear-gradient(90deg,var(--good),var(--accent2));
       transition:width .16s ease;
     }
-    .badges{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-    .badge{
-      padding:8px 10px;
-      border-radius:999px;
-      background:rgba(124,92,255,.18);
-      border:1px solid rgba(124,92,255,.35);
-      font-size:12px;
+
+    .sidePanel{
+      position:sticky;
+      top:22px;
+      align-self:start;
+      display:none;
+      padding:18px;
+      border-radius:24px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      max-height:calc(100vh - 44px);
+      overflow:auto;
     }
 
-    .side{
-      padding:20px;
-      display:none;
-      gap:14px;
-    }
-    .side.show{display:grid}
-    .upgradeBox{
-      padding:14px;
-      border-radius:18px;
+    .sidePanel.show{display:block}
+    .panelTitle{margin:0 0 10px;font-size:18px}
+    .panelGroup{display:grid;gap:10px}
+
+    .upgrade{
+      padding:13px;
+      border-radius:16px;
       background:var(--panel2);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--line);
     }
-    .upgradeBox h3{
+
+    .upgrade h3{
       margin:0 0 4px;
-      font-size:16px;
+      font-size:15px;
     }
-    .upgradeBox p{
-      margin:0 0 12px;
+
+    .upgrade p{
+      margin:0 0 11px;
       color:var(--muted);
-      font-size:13px;
+      font-size:12px;
       line-height:1.35;
     }
+
     .buy{
       width:100%;
       border:none;
-      border-radius:14px;
-      padding:12px 14px;
+      border-radius:13px;
+      padding:11px 13px;
       font-weight:900;
       color:#08111b;
       background:linear-gradient(135deg,var(--accent2),#8cfffb);
       cursor:pointer;
     }
+
     .buy:disabled{
-      opacity:.45;
+      opacity:.42;
       cursor:not-allowed;
       filter:grayscale(1);
     }
+
     .controls{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      margin:12px 0;
     }
+
     .ghost{
       border:none;
-      border-radius:14px;
-      padding:12px 14px;
+      border-radius:13px;
+      padding:11px 13px;
       font-weight:900;
       cursor:pointer;
       background:rgba(255,255,255,.08);
       color:var(--text);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--line);
     }
+
     .log{
-      height:200px;
-      overflow:auto;
       display:grid;
       gap:8px;
+      max-height:240px;
+      overflow:auto;
       padding-right:4px;
     }
+
     .entry{
-      font-size:13px;
-      color:#d8e2f0;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
+      padding:10px 11px;
       border-radius:14px;
-      padding:10px 12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:#dbe5f2;
+      font-size:12px;
+      line-height:1.35;
     }
-    .overlay{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:20;
+
+    .badgeRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+      justify-content:center;
     }
+
+    .badge{
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(124,92,255,.17);
+      border:1px solid rgba(124,92,255,.35);
+      font-size:12px;
+      color:#e9ebff;
+    }
+
     .popup{
-      position:absolute;
+      position:fixed;
       left:50%;
       top:12%;
       transform:translateX(-50%);
       background:rgba(8,12,18,.92);
       border:1px solid rgba(255,255,255,.12);
       color:white;
-      padding:14px 18px;
-      border-radius:18px;
+      padding:13px 16px;
+      border-radius:16px;
       font-weight:900;
       box-shadow:var(--shadow);
       opacity:0;
-      animation:popup 2.4s ease forwards;
+      z-index:30;
+      animation:pop 2.3s ease forwards;
     }
-    @keyframes popup{
+
+    @keyframes pop{
       0%{opacity:0;transform:translateX(-50%) translateY(-10px)}
       12%{opacity:1;transform:translateX(-50%) translateY(0)}
       85%{opacity:1}
       100%{opacity:0;transform:translateX(-50%) translateY(-20px)}
     }
+
     .notif{
-      position:absolute;
+      position:fixed;
       right:18px;
       top:18px;
       min-width:230px;
       max-width:340px;
       background:rgba(18,24,35,.96);
       border:1px solid rgba(255,255,255,.09);
-      border-radius:18px;
-      padding:14px 16px;
+      border-radius:16px;
+      padding:13px 14px;
       box-shadow:var(--shadow);
-      animation:slidein .35s ease-out;
+      z-index:29;
+      animation:slideIn .35s ease-out;
     }
-    @keyframes slidein{
+
+    @keyframes slideIn{
       from{transform:translateX(18px);opacity:0}
       to{transform:translateX(0);opacity:1}
     }
+
     .notif small{
       display:block;
       color:var(--muted);
       margin-top:4px;
     }
+
     .flash{
       position:fixed;
       inset:0;
       background:#fff;
       opacity:0;
+      z-index:40;
       pointer-events:none;
-      z-index:30;
     }
-    .shake{animation:shake .35s linear infinite}
+
+    .shake{animation:shake .33s linear infinite}
     @keyframes shake{
       0%{transform:translate(0,0)}
       25%{transform:translate(2px,-1px)}
@@ -328,94 +406,74 @@
       75%{transform:translate(1px,2px)}
       100%{transform:translate(0,0)}
     }
-    .spin{animation:spin 2.5s linear infinite}
+
+    .spin{animation:spin 2.6s linear infinite}
     @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
     .dvd{
       position:absolute;
-      width:86px;
-      height:48px;
-      border:3px solid white;
+      width:82px;
+      height:46px;
+      border:3px solid #fff;
       border-radius:12px;
       display:grid;
       place-items:center;
       font-weight:900;
-      background:rgba(255,255,255,.07);
-      backdrop-filter:blur(6px);
-      box-shadow:0 10px 25px rgba(0,0,0,.25);
+      font-size:15px;
+      color:#fff;
+      background:rgba(255,255,255,.05);
+      box-shadow:0 10px 25px rgba(0,0,0,.22);
+      backdrop-filter:blur(5px);
     }
-    .dvd span{
-      font-size:16px;
-      letter-spacing:.08em;
+
+    .dvd span{letter-spacing:.08em}
+
+    .panelReveal{
+      display:none;
+      padding:12px 0 0;
     }
-    .sidePanel{
-      position:absolute;
-      top:0;
-      right:0;
-      width:320px;
-      height:100%;
-      background:rgba(9,13,20,.92);
-      border-left:1px solid rgba(255,255,255,.08);
-      backdrop-filter:blur(10px);
-      transform:translateX(100%);
-      transition:transform .35s ease;
-      z-index:8;
-      padding:18px;
-      overflow:auto;
-    }
-    .sidePanel.show{transform:translateX(0)}
-    .panelTitle{
-      font-weight:900;
-      margin:0 0 10px;
-      font-size:18px;
-    }
-    .smallList{
-      display:grid;
-      gap:10px;
-    }
-    .smallCard{
+
+    .panelReveal.show{display:block}
+
+    .panelHint{
+      padding:10px 12px;
+      border-radius:14px;
       background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px;
-      padding:12px;
-      font-size:13px;
-      color:#dbe6f4;
+      border:1px solid var(--line);
+      color:#dbe5f2;
+      font-size:12px;
+      margin-top:10px;
     }
-    .smallCard strong{display:block;margin-bottom:4px;color:#fff}
-    .oceanMode .main{
-      background:linear-gradient(180deg,#56c1ff 0%, #157dc4 35%, #07518a 100%) !important;
-    }
-    .oceanMode body{
-      background:linear-gradient(180deg,#56c1ff 0%, #157dc4 35%, #07518a 100%) !important;
-    }
+
     .oceanScene{
       position:absolute;
       inset:0;
-      overflow:hidden;
-      pointer-events:none;
       opacity:0;
+      pointer-events:none;
       transition:opacity .6s ease;
+      overflow:hidden;
     }
+
     .oceanMode .oceanScene{opacity:1}
     .oceanSky{
       position:absolute;
-      inset:0 0 32% 0;
-      background:linear-gradient(180deg,#7dd3ff 0%,#4fc0ff 45%,#1e8dd1 100%);
+      inset:0 0 35% 0;
+      background:linear-gradient(180deg,#7dd3ff 0%,#4ebfff 45%,#1e8dd1 100%);
     }
     .oceanSea{
       position:absolute;
-      inset:auto 0 0 0;
-      height:40%;
-      background:linear-gradient(180deg,#2b92d8 0%,#0965a6 60%,#064d83 100%);
+      left:0;right:0;bottom:0;height:42%;
+      background:linear-gradient(180deg,#2f99de 0%,#0c6cad 60%,#074d82 100%);
       box-shadow:inset 0 18px 0 rgba(255,255,255,.08);
     }
     .oceanWave{
       position:absolute;
-      bottom:24%;
+      bottom:26%;
       left:-10%;
       width:120%;
       height:36px;
       background:radial-gradient(circle at 20px 18px, rgba(255,255,255,.45) 0, rgba(255,255,255,.12) 28%, transparent 29%) 0 0/120px 36px repeat-x;
-      opacity:.8;
+      opacity:.84;
       animation:wave 6s linear infinite;
     }
     @keyframes wave{
@@ -425,32 +483,31 @@
     .oceanText{
       position:absolute;
       left:0;right:0;
-      top:40%;
+      top:42%;
       text-align:center;
-      font-size:clamp(26px,4vw,48px);
+      color:#fff;
+      font-size:clamp(26px,4vw,50px);
       font-weight:900;
-      letter-spacing:.01em;
-      color:white;
       text-shadow:0 4px 20px rgba(0,0,0,.4);
-      opacity:.98;
+      z-index:2;
     }
     .credits{
       position:absolute;
       left:50%;
-      top:56%;
+      top:57%;
       transform:translateX(-50%);
+      width:min(92vw,520px);
       text-align:center;
-      color:rgba(255,255,255,.88);
       font-size:15px;
       line-height:1.7;
-      max-width:520px;
-      width:min(92vw,520px);
+      color:rgba(255,255,255,.88);
+      z-index:2;
     }
     .credits .line{
       opacity:0;
-      animation:fadeup 1s ease forwards;
+      animation:fadeUp 1s ease forwards;
     }
-    @keyframes fadeup{
+    @keyframes fadeUp{
       from{opacity:0;transform:translateY(10px)}
       to{opacity:1;transform:translateY(0)}
     }
@@ -461,9 +518,10 @@
       transform:translateX(-50%);
       display:flex;
       gap:10px;
+      z-index:3;
+      pointer-events:auto;
       flex-wrap:wrap;
       justify-content:center;
-      pointer-events:auto;
     }
     .endBtn{
       border:none;
@@ -476,27 +534,27 @@
       border:1px solid rgba(255,255,255,.18);
       backdrop-filter:blur(8px);
     }
-    @media (max-width:980px){
-      .grid{grid-template-columns:1fr}
-      .stats{justify-content:flex-start}
-      .bottomRow{grid-template-columns:1fr}
-      .main{min-height:580px}
-      .sidePanel{position:fixed;top:auto;bottom:0;right:0;left:0;width:auto;height:42vh;transform:translateY(100%);border-left:none;border-top:1px solid rgba(255,255,255,.08)}
-      .sidePanel.show{transform:translateY(0)}
+
+    @media (max-width: 960px){
+      .shell.show-side{grid-template-columns:1fr}
+      .sidePanel{
+        position:fixed;
+        left:12px;right:12px;bottom:12px;top:auto;
+        max-height:42vh;
+      }
+      .topbar{padding:0 2px}
     }
   </style>
 </head>
 <body>
-  <div class="overlay" id="overlay"></div>
   <div class="flash" id="flash"></div>
-
-  <div class="wrap" id="app">
+  <div class="app" id="app">
     <div class="topbar">
       <div class="brand">
         <div class="logo" id="logo">◎</div>
         <div>
-          <h1 id="title">Overstimulated Clicker</h1>
-          <p class="sub" id="sub">Click once. Then the internet starts talking back.</p>
+          <h1 id="title">Stimulation Clicker</h1>
+          <p class="sub" id="sub">Click me.</p>
         </div>
       </div>
       <div class="stats">
@@ -506,13 +564,15 @@
       </div>
     </div>
 
-    <div class="grid">
-      <div class="card main" id="mainCard">
-        <div class="memezone">
+    <div class="shell" id="shell">
+      <div class="stage card mainCard" id="mainCard">
+        <div class="center">
           <div class="floaters" id="floaters"></div>
-          <div class="chaosLayer" id="chaosLayer"></div>
           <div class="dvdLayer" id="dvdLayer"></div>
+          <div class="chaosLayer" id="chaosLayer"></div>
+          <div class="overlayLayer" id="overlayLayer"></div>
           <div class="titleLayer" id="titleLayer"></div>
+
           <div class="oceanScene" id="oceanScene">
             <div class="oceanSky"></div>
             <div class="oceanSea"></div>
@@ -523,30 +583,27 @@
               <button class="endBtn" id="restartBtn">Restart</button>
             </div>
           </div>
-          <button class="clicker" id="clicker">Click</button>
-        </div>
-        <div class="caption" id="caption">Click the button, you know you want to.</div>
 
-        <div class="bottomRow">
-          <div class="mini">
-            <div class="sectionTitle">Progress</div>
-            <div>Level <span id="level">1</span></div>
-            <div class="meter"><div class="bar" id="xpBar"></div></div>
-            <div class="badges" id="badges"></div>
-          </div>
-          <div class="mini">
-            <div class="sectionTitle">Overload</div>
-            <div id="overloadText">Barely anything is happening.</div>
-            <div class="meter"><div class="bar" id="overBar"></div></div>
+          <button class="clicker" id="clicker">Click me</button>
+
+          <div class="miniBar">
+            <div class="miniCard">
+              <div>Progress</div>
+              <div>Level <span id="level">1</span></div>
+              <div class="meter"><div class="bar" id="xpBar"></div></div>
+            </div>
+            <div class="miniCard">
+              <div>Overload</div>
+              <div id="overloadText">Barely anything is happening.</div>
+              <div class="meter"><div class="bar" id="overBar"></div></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="card side" id="sidePanel">
-        <div>
-          <h2 class="sectionTitle">Upgrades</h2>
-          <div id="shop"></div>
-        </div>
+      <aside class="sidePanel" id="sidePanel">
+        <h2 class="panelTitle">Upgrades</h2>
+        <div class="panelGroup" id="shop"></div>
 
         <div class="controls">
           <button class="ghost" id="saveBtn">Save</button>
@@ -554,148 +611,132 @@
           <button class="ghost" id="soundBtn">Sound: On</button>
         </div>
 
-        <div>
-          <h2 class="sectionTitle">Activity Feed</h2>
-          <div class="log" id="log"></div>
+        <div class="panelReveal" id="unlockArea">
+          <div class="panelHint" id="unlockHint">Side panels unlock as you progress.</div>
         </div>
 
-        <div id="unlockPanels" style="display:grid;gap:10px;"></div>
-      </div>
+        <h2 class="panelTitle" style="margin-top:8px;">Activity Feed</h2>
+        <div class="log" id="log"></div>
+      </aside>
     </div>
   </div>
 
   <script>
-    const SAVE_KEY = "overstimulated_clicker_save_v2";
+    const SAVE_KEY = "stimulation_clicker_style_save_v3";
 
     const UPGRADE_DEFS = [
-      ["dvd","Bouncing DVD",5,"Adds a bouncing DVD logo.",1],
-      ["tab","Add Tab Title",5,"Adds stimulation to the browser title.",0],
-      ["amount","Amount Animation",10,"Makes numbers pop on gain.",0],
-      ["sps","SPS Counter",25,"Shows stimulation per second.",0],
-      ["button","Button Upgrade",40,"Big button gets stronger.",1],
-      ["dvdsound","DVD Bounce Sound",75,"Bouncing DVDs make sound.",0],
-      ["subway","Subway Surfers",100,"Adds a moving background distraction.",0],
-      ["news","Breaking News",100,"Adds news alerts.",0],
-      ["crit","Critical Hits",200,"Random clicks hit harder.",0],
-      ["lofi","Lofi Beats",250,"Adds calm beats under the chaos.",0],
-      ["rain","Rain Sounds",300,"Adds a rain ambience layer.",0],
-      ["pinwheel","Pinwheel",700,"A spinny distraction appears.",0],
-      ["hydraulic","Hydraulic Press",1000,"Presses things for stimulation.",1],
-      ["achievements","Achievements",1500,"Shows achievement system.",0],
-      ["popcorn","Popcorn Animation",3500,"Adds a popping distraction.",0],
-      ["thunder","Thunder Sounds",2000,"Thunder strikes occasionally.",0],
-      ["slime","Slime",4000,"Adds slime goo to the screen.",0],
-      ["tech","Technicolor",5000,"Makes everything more colorful.",0],
-      ["mukbang","Mukbang",6000,"Adds loud food vibes.",0],
-      ["screen","Screen Time",7500,"Shows screen time distraction.",0],
-      ["levels","Levels",8000,"Unlocks level-based UI effects.",0],
-      ["crime","True Crime Podcast",10000,"Adds podcast chatter.",0],
-      ["autohydraulic","Auto Hydraulics",15000,"Hydraulic press runs by itself.",0],
-      ["corner","Corner Hits",15000,"DVDs get corner hits.",0],
-      ["ui","UI Upgrade",15000,"Polishes the interface a bit.",0],
-      ["shop","Item Shop",17500,"Adds a secondary item panel.",0],
-      ["loot","Loot Boxes",20000,"Adds loot box surprises.",0],
-      ["button2","Button Upgrade II",25000,"Click button gets absurd.",1],
-      ["stock","Stock Market",25000,"Adds fake stock ticker vibes.",0],
-      ["duo","Duolingo",25000,"Adds lesson reminders.",0],
-      ["med","Meditation",35000,"A brief calm mode.",0],
-      ["med2","Meditation x2",60000,"Even calmer. Sort of.",0],
-      ["dvdspeed1","DVD Speed I",50000,"DVDs bounce faster.",0],
-      ["surfersmute","Subway Surfers Unmuted",50000,"Now it is louder.",0],
-      ["fit","Fitness Instructor",75000,"Adds workout yelling.",0],
-      ["currency","In-game Currency",100000,"Adds more fake economy.",0],
-      ["react","Reaction Streamer",100000,"Adds reaction stream overlay.",0],
-      ["crypto","Crypto",125000,"Adds a volatile chart.",0],
-      ["powerups","Powerups",150000,"Random boosts begin appearing.",0],
-      ["sky","Skywriter",180000,"Writes chaos in the sky.",0],
-      ["narrator","Voice Narrator",200000,"The game starts narrating itself.",0],
-      ["fullscreen","Subway Surfers Fullscreen",250000,"Fullscreen distraction mode.",0],
-      ["leverage","Leverage",250000,"Risky finance nonsense.",0],
-      ["tamagotchi","Tamagotchi",300000,"A tiny pet begs for attention.",0],
-      ["twitch","Twitch Chat",500000,"Chat spam appears.",0],
-      ["dvdspeed2","DVD Speed II",500000,"DVDs are now ridiculous.",0],
-      ["wormhole","Subway Surfers Wormhole",1000000,"Space-time distraction breaks.",0],
-      ["ocean","Go to the Ocean",2000000,"End the chaos.",0]
+      ["dvd","Bouncing DVD",5,"Adds a bouncing DVD logo."],
+      ["tab","Add Tab Title",5,"Adds stimulation to the browser title."],
+      ["amount","Amount Animation",10,"Makes numbers pop on gain."],
+      ["sps","SPS Counter",25,"Shows stimulation per second."],
+      ["button","Button Upgrade",40,"Button gets stronger."],
+      ["dvdsound","DVD Bounce Sound",75,"DVDs make sound when they bounce."],
+      ["news","Breaking News",100,"Adds a news overlay."],
+      ["subway","Subway Surfers",120,"Adds a moving distraction."],
+      ["crit","Critical Hits",200,"Random clicks hit harder."],
+      ["lofi","Lofi Beats",250,"Adds calm beats."],
+      ["rain","Rain Sounds",300,"Adds rain ambience."],
+      ["hydraulic","Hydraulic Press",1000,"Adds a press animation."],
+      ["achievements","Achievements",1500,"Unlocks achievement panel."],
+      ["screen","Screen Time",7500,"Adds a screen-time reminder."],
+      ["stock","Stock Market",25000,"Adds a fake stock overlay."],
+      ["duo","Duolingo",25000,"Adds lesson reminders."],
+      ["med","Meditation",35000,"Brief calm mode."],
+      ["twitch","Twitch Chat",500000,"Chat spam begins."],
+      ["wormhole","Wormhole",1000000,"Space-time distraction."],
+      ["ocean","Go to the Ocean",2000000,"End the chaos."]
     ];
 
     const state = {
-      points: 0, sps: 0, clickValue: 1, multiplier: 1, critical: 1,
-      level: 1, xp: 0, nextLevel: 25, stage: 1, totalClicks: 0,
-      chaos: 0, sound: true, ocean: false,
-      upgrades: {}, unlocked: {}, counts: { dvd: 0, hydraulic: 0, dvdspeed1: 0, dvdspeed2: 0 }
+      points: 0,
+      sps: 0,
+      clickValue: 1,
+      multiplier: 1,
+      critical: 1,
+      level: 1,
+      xp: 0,
+      nextLevel: 25,
+      stage: 1,
+      totalClicks: 0,
+      chaos: 0,
+      sound: true,
+      ocean: false,
+      unlocked: {},
+      upgrades: {},
+      sideVisible: false
     };
 
     const el = id => document.getElementById(id);
     const fmt = n => Math.floor(n).toLocaleString();
     const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
     const captions = [
-      "Click the button, you know you want to.",
-      "The screen is getting louder.",
-      "This is a very normal website.",
-      "Your attention span is now a resource.",
-      "More stimulation. Less peace.",
-      "The internet is in the room with you.",
-      "Keep clicking. It gets worse."
+      "Click me.",
+      "Now click again.",
+      "The screen is very normal.",
+      "More stimulation incoming.",
+      "This is probably too much.",
+      "You should keep going.",
+      "The internet is getting louder."
     ];
 
     let audioCtx = null;
-    function beep(type = "click") {
+    function beep(type="click"){
       if (!state.sound) return;
-      try {
+      try{
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === "suspended") audioCtx.resume();
         const o = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         o.connect(g); g.connect(audioCtx.destination);
         const now = audioCtx.currentTime;
-        if (type === "click") {
-          o.type = "square";
-          o.frequency.setValueAtTime(480 + Math.random() * 120, now);
+        if(type==="click"){
+          o.type="square";
+          o.frequency.setValueAtTime(500 + Math.random()*120, now);
           g.gain.setValueAtTime(0.0001, now);
           g.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
-          g.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
-          o.start(now); o.stop(now + 0.1);
-        } else if (type === "buy") {
-          o.type = "sine";
+          g.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+          o.start(now); o.stop(now + 0.09);
+        }else if(type==="buy"){
+          o.type="sine";
           o.frequency.setValueAtTime(280, now);
-          o.frequency.exponentialRampToValueAtTime(660, now + 0.12);
+          o.frequency.exponentialRampToValueAtTime(680, now + 0.12);
           g.gain.setValueAtTime(0.0001, now);
           g.gain.exponentialRampToValueAtTime(0.1, now + 0.02);
           g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
           o.start(now); o.stop(now + 0.2);
-        } else {
-          o.type = "triangle";
-          o.frequency.setValueAtTime(160 + Math.random() * 120, now);
+        }else{
+          o.type="triangle";
+          o.frequency.setValueAtTime(160 + Math.random()*80, now);
           g.gain.setValueAtTime(0.0001, now);
-          g.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.01);
           g.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
           o.start(now); o.stop(now + 0.26);
         }
-      } catch {}
+      }catch{}
     }
 
-    function log(msg) {
+    function log(msg){
       const box = el("log");
       const d = document.createElement("div");
       d.className = "entry";
       d.textContent = msg;
       box.prepend(d);
-      while (box.children.length > 8) box.removeChild(box.lastChild);
+      while(box.children.length > 7) box.removeChild(box.lastChild);
     }
 
-    function popup(msg) {
+    function popup(msg){
       const p = document.createElement("div");
       p.className = "popup";
       p.textContent = msg;
-      el("overlay").appendChild(p);
-      setTimeout(() => p.remove(), 2400);
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2300);
     }
 
-    function notif(title, text) {
+    function notif(title, text){
       const n = document.createElement("div");
       n.className = "notif";
-      n.innerHTML = "<strong>" + title + "</strong><small>" + text + "</small>";
-      el("overlay").appendChild(n);
+      n.innerHTML = `<strong>${title}</strong><small>${text}</small>`;
+      document.body.appendChild(n);
       setTimeout(() => {
         n.style.transition = "opacity .35s ease, transform .35s ease";
         n.style.opacity = "0";
@@ -704,202 +745,167 @@
       }, 2400);
     }
 
-    function floater(txt, color) {
+    function floater(text, color){
       const f = document.createElement("div");
       f.className = "floater";
-      f.textContent = txt;
-      f.style.left = (20 + Math.random() * 60) + "%";
-      f.style.top = (58 + Math.random() * 18) + "%";
-      f.style.color = color || rnd(["#7c5cff", "#00d4ff", "#00e676", "#ffcc00", "#ff5c7a"]);
+      f.textContent = text;
+      f.style.left = (22 + Math.random()*56) + "%";
+      f.style.top = (54 + Math.random()*18) + "%";
+      f.style.color = color || rnd(["#7c5cff","#00d4ff","#00e676","#ffcc00","#ff5c7a"]);
       el("floaters").appendChild(f);
       setTimeout(() => f.remove(), 1100);
     }
 
-    function flash() {
+    function flash(){
       const f = el("flash");
       f.style.transition = "none";
       f.style.opacity = "0";
       requestAnimationFrame(() => {
         f.style.transition = "opacity .08s linear";
-        f.style.opacity = ".18";
+        f.style.opacity = ".17";
         setTimeout(() => f.style.opacity = "0", 90);
       });
     }
 
-    function save() {
+    function save(){
       localStorage.setItem(SAVE_KEY, JSON.stringify(state));
-      notif("Saved", "Progress saved locally.");
     }
 
-    function load() {
+    function load(){
       const raw = localStorage.getItem(SAVE_KEY);
-      if (!raw) return false;
-      try {
+      if(!raw) return false;
+      try{
         const data = JSON.parse(raw);
         Object.assign(state, data);
-        state.upgrades = state.upgrades || {};
         state.unlocked = state.unlocked || {};
-        state.counts = state.counts || { dvd: 0, hydraulic: 0, dvdspeed1: 0, dvdspeed2: 0 };
+        state.upgrades = state.upgrades || {};
         return true;
-      } catch { return false; }
+      }catch{return false;}
     }
 
-    function resetGame() {
-      if (!confirm("Reset everything?")) return;
-      localStorage.removeItem(SAVE_KEY);
-      location.reload();
+    function unlockSidePanel(msg){
+      if(state.sideVisible) return;
+      state.sideVisible = true;
+      el("shell").classList.add("show-side");
+      el("sidePanel").classList.add("show");
+      el("unlockArea").classList.add("show");
+      el("unlockHint").textContent = msg;
+      popup(msg);
+      notif("Side panel unlocked", msg);
     }
 
-    function startOcean() {
-      state.ocean = true;
-      document.body.style.overflow = "hidden";
-      el("app").classList.add("oceanMode");
-      el("clicker").style.display = "none";
-      el("sidePanel").style.display = "none";
-      el("sidePanel").classList.remove("show");
-      el("title").textContent = "Go to the Ocean";
-      el("sub").textContent = "";
-      el("caption").style.display = "none";
-      el("oceanScene").style.display = "block";
-      el("oceanScene").style.opacity = "1";
-      el("mainCard").classList.remove("shake");
-      el("logo").classList.remove("spin");
-      document.body.style.background = "linear-gradient(180deg,#7dd3ff 0%, #2c9ae2 38%, #0b5d9a 100%)";
-      const credits = [
-        "You made it to the ocean.",
-        "The screen is quiet now.",
-        "Thanks for playing.",
-        "Restart to disturb the peace again."
+    function renderUnlocks(){
+      const area = el("unlockArea");
+      area.innerHTML = "";
+      const triggers = [
+        ["level3","The upgrade menu appears."],
+        ["level6","A few distractions join the screen."],
+        ["level12","Side chaos becomes visible."],
+        ["level20","The page starts feeling crowded."]
       ];
-      el("credits").innerHTML = credits.map((t,i)=>`<div class="line" style="animation-delay:${i*.9}s">${t}</div>`).join("");
-      notif("Ending", "The chaos is over.");
-      log("Reached the ocean ending.");
-      save();
+      if(state.level >= 3){
+        triggers.forEach((t,i)=>{
+          if(state.level >= (i+1)*3 && !state.unlocked[t[0]]){
+            state.unlocked[t[0]] = true;
+            const c = document.createElement("div");
+            c.className = "panelHint";
+            c.textContent = t[1];
+            area.appendChild(c);
+          }
+        });
+      }else{
+        const c = document.createElement("div");
+        c.className = "panelHint";
+        c.textContent = "Side panels unlock as you progress.";
+        area.appendChild(c);
+      }
     }
 
-    function buy(key) {
+    function showSidePanelIfNeeded(){
+      if(state.level >= 3 || state.upgrades.news || state.upgrades.subway || state.upgrades.lofi || state.upgrades.rain || state.upgrades.stock || state.upgrades.duo || state.upgrades.twitch){
+        unlockSidePanel("The side panel has appeared.");
+      }
+    }
+
+    function buy(key){
       const def = UPGRADE_DEFS.find(x => x[0] === key);
-      if (!def || state.points < def[2] || state.ocean) return;
+      if(!def || state.points < def[2] || state.ocean) return;
       state.points -= def[2];
       state.upgrades[key] = (state.upgrades[key] || 0) + 1;
       beep("buy");
       log("Bought " + def[1] + ".");
       applyUpgrade(key);
-      if (key === "shop") {
-        unlockPanel("Item Shop", "A second panel unlocks.");
-      }
       update();
       renderShop();
+      showSidePanelIfNeeded();
       save();
     }
 
-    function unlockPanel(title, body) {
-      if (state.unlocked[title]) return;
-      state.unlocked[title] = true;
-      const box = document.createElement("div");
-      box.className = "smallCard";
-      box.innerHTML = "<strong>" + title + "</strong>" + body;
-      el("unlockPanels").appendChild(box);
-      el("sidePanel").classList.add("show");
-      el("sidePanel").style.display = "grid";
-    }
-
-    function applyUpgrade(key) {
+    function applyUpgrade(key){
       state.chaos = Math.min(100, state.chaos + 3);
-
-      if (key === "dvd") {
-        state.counts.dvd++;
-        addDVD();
-        state.sps += 1;
-      }
-      if (key === "button") state.clickValue += 1;
-      if (key === "button2") state.clickValue += 3;
-      if (key === "hydraulic") {
-        state.counts.hydraulic++;
-        state.sps += 4;
-        addHydraulic();
-      }
-      if (key === "autohydraulic") state.sps += 12;
-      if (key === "dvdspeed1") state.counts.dvdspeed1++;
-      if (key === "dvdspeed2") state.counts.dvdspeed2++;
-      if (key === "crit") state.critical += 0.15;
-      if (key === "lofi") showAmbient("Lofi Beats");
-      if (key === "rain") showAmbient("Rain Sounds");
-      if (key === "thunder") showAmbient("Thunder Sounds");
-      if (key === "mukbang") showAmbient("Mukbang");
-      if (key === "crime") showAmbient("True Crime Podcast");
-      if (key === "screen") notif("Screen Time", "You have been on this site for too long.");
-      if (key === "news") showNews();
-      if (key === "subway") showSubway(false);
-      if (key === "fullscreen") showSubway(true);
-      if (key === "stock") showStock();
-      if (key === "duo") showDuolingo();
-      if (key === "med") calmMode(1);
-      if (key === "med2") calmMode(2);
-      if (key === "loot") lootBox();
-      if (key === "powerups") powerup();
-      if (key === "sky") skywriter();
-      if (key === "narrator") narrator();
-      if (key === "twitch") twitchChat();
-      if (key === "wormhole") wormhole();
-      if (key === "ocean") startOcean();
-      if (key === "achievements") log("Achievements unlocked.");
-      if (key === "tech") document.body.style.filter = "saturate(1.15) contrast(1.02)";
-      if (key === "ui") el("mainCard").style.borderRadius = "28px";
-      if (key === "shop") {
-        el("sidePanel").classList.add("show");
-        el("sidePanel").style.display = "grid";
-      }
-      if (key === "corner") notif("Corner hit", "The DVD bounced again.");
-      if (key === "pinwheel") addPinwheel();
-      if (key === "react") reactionStream();
-      if (key === "crypto") cryptoGraph();
-      if (key === "leverage") leverageAlert();
-      if (key === "tamagotchi") tamagotchiPet();
-      if (key === "fit") fitnessCoach();
-      if (key === "currency") currencyBurst();
+      if(key === "dvd") addDVD();
+      if(key === "button") state.clickValue += 1;
+      if(key === "sps") state.sps += 1;
+      if(key === "news") showNews();
+      if(key === "subway") showSubway(false);
+      if(key === "crit") state.critical += 0.15;
+      if(key === "lofi") showOverlayTag("Lofi Beats");
+      if(key === "rain") showOverlayTag("Rain Sounds");
+      if(key === "hydraulic") addHydraulic();
+      if(key === "screen") notif("Screen Time", "You have been here for a while.");
+      if(key === "stock") showStock();
+      if(key === "duo") showDuolingo();
+      if(key === "med") calmMode();
+      if(key === "twitch") twitchChat();
+      if(key === "wormhole") wormhole();
+      if(key === "ocean") startOceanEnding();
+      if(key === "achievements") log("Achievements unlocked.");
+      if(key === "button") popup("Button upgraded.");
+      if(key === "tab") document.title = "Stimulation: " + fmt(state.points);
     }
 
-    function showAmbient(name) {
-      notif(name, "Ambient layer added.");
-      const t = document.createElement("div");
-      t.className = "smallCard";
-      t.style.position = "absolute";
-      t.style.left = "20px";
-      t.style.bottom = "20px";
-      t.style.width = "220px";
-      t.textContent = name + " is now playing in the background.";
-      el("chaosLayer").appendChild(t);
-      setTimeout(() => t.remove(), 8000);
+    function showOverlayTag(text){
+      const d = document.createElement("div");
+      d.className = "notif";
+      d.style.right = "18px";
+      d.style.top = "18px";
+      d.textContent = text;
+      document.body.appendChild(d);
+      setTimeout(() => {
+        d.style.transition = "opacity .35s ease, transform .35s ease";
+        d.style.opacity = "0";
+        d.style.transform = "translateX(18px)";
+        setTimeout(() => d.remove(), 380);
+      }, 2200);
     }
 
-    function addDVD() {
+    function addDVD(){
       const d = document.createElement("div");
       d.className = "dvd";
       d.innerHTML = "<span>DVD</span>";
-      d.style.left = (10 + Math.random() * 55) + "%";
-      d.style.top = (10 + Math.random() * 45) + "%";
-      d.dataset.vx = (1.2 + Math.random() * 1.8) * (Math.random() < 0.5 ? -1 : 1);
-      d.dataset.vy = (1.0 + Math.random() * 1.6) * (Math.random() < 0.5 ? -1 : 1);
+      d.style.left = (12 + Math.random()*56) + "%";
+      d.style.top = (12 + Math.random()*42) + "%";
+      d.dataset.vx = (1.2 + Math.random()*1.8) * (Math.random() < 0.5 ? -1 : 1);
+      d.dataset.vy = (1.0 + Math.random()*1.6) * (Math.random() < 0.5 ? -1 : 1);
       el("dvdLayer").appendChild(d);
     }
 
-    function moveDVDs() {
+    function moveDVDs(){
       [...el("dvdLayer").children].forEach(d => {
-        const speedBoost = (state.upgrades.dvdspeed1 ? 1.35 : 1) * (state.upgrades.dvdspeed2 ? 1.9 : 1);
+        const speed = 1 + (state.upgrades.dvdspeed1 ? 0.45 : 0) + (state.upgrades.dvdspeed2 ? 0.9 : 0);
         let x = parseFloat(d.style.left);
         let y = parseFloat(d.style.top);
-        let vx = parseFloat(d.dataset.vx) * speedBoost;
-        let vy = parseFloat(d.dataset.vy) * speedBoost;
+        let vx = parseFloat(d.dataset.vx) * speed;
+        let vy = parseFloat(d.dataset.vy) * speed;
         x += vx * 0.18;
         y += vy * 0.18;
-        if (x < 1 || x > 85) {
+        if(x < 1 || x > 85){
           vx *= -1;
-          if (state.upgrades.dvdsound) beep("chaos");
+          if(state.upgrades.dvdsound) beep("chaos");
         }
-        if (y < 1 || y > 75) {
+        if(y < 1 || y > 75){
           vy *= -1;
-          if (state.upgrades.dvdsound) beep("chaos");
+          if(state.upgrades.dvdsound) beep("chaos");
         }
         x = Math.max(1, Math.min(85, x));
         y = Math.max(1, Math.min(75, y));
@@ -910,193 +916,119 @@
       });
     }
 
-    function addHydraulic() {
+    function addHydraulic(){
       const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
+      d.className = "notif";
       d.style.left = "50%";
-      d.style.top = "45%";
-      d.style.transform = "translate(-50%,-50%)";
-      d.style.fontSize = "14px";
-      d.style.fontWeight = "900";
+      d.style.right = "auto";
+      d.style.top = "18%";
+      d.style.transform = "translateX(-50%)";
       d.textContent = "Hydraulic Press";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 10000);
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 9000);
     }
 
-    function showNews() {
+    function showNews(){
       notif("Breaking News", "Something extremely online just happened.");
     }
 
-    function showSubway(full=false) {
+    function showSubway(full){
       const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
-      d.style.left = "0";
-      d.style.top = full ? "0" : "12%";
-      d.style.width = "100%";
+      d.className = "notif";
+      d.style.left = "50%";
+      d.style.right = "auto";
+      d.style.top = full ? "0" : "11%";
+      d.style.transform = "translateX(-50%)";
+      d.style.width = full ? "100%" : "280px";
+      d.style.maxWidth = "none";
       d.style.height = full ? "100%" : "76px";
       d.style.display = "grid";
       d.style.placeItems = "center";
-      d.style.fontSize = full ? "36px" : "24px";
+      d.style.borderRadius = full ? "0" : "16px";
       d.style.fontWeight = "900";
-      d.style.color = "rgba(255,255,255,.9)";
+      d.style.fontSize = full ? "36px" : "24px";
       d.style.background = "linear-gradient(90deg, rgba(18,20,26,.88), rgba(36,42,60,.88))";
-      d.textContent = full ? "Subway Surfers" : "Subway Surfers";
-      el("chaosLayer").appendChild(d);
+      d.textContent = "Subway Surfers";
+      document.body.appendChild(d);
       setTimeout(() => d.remove(), full ? 12000 : 8000);
-      if (full) el("sidePanel").classList.add("show");
     }
 
-    function addPinwheel() {
-      const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
-      d.style.right = "18px";
-      d.style.top = "18px";
-      d.style.width = "80px";
-      d.style.height = "80px";
-      d.style.borderRadius = "50%";
-      d.style.display = "grid";
-      d.style.placeItems = "center";
-      d.style.animation = "spin 1.8s linear infinite";
-      d.textContent = "✺";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 10000);
+    function showStock(){
+      notif("Stock Market", "STONKS ↑ 12.4%");
     }
 
-    function showStock() {
-      const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
-      d.style.left = "18px";
-      d.style.top = "18px";
-      d.style.padding = "10px 12px";
-      d.style.borderRadius = "14px";
-      d.style.background = "rgba(0,0,0,.35)";
-      d.style.color = "#8cfffb";
-      d.style.fontSize = "14px";
-      d.textContent = "STONKS ↑ 12.4%";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 8000);
-    }
-
-    function showDuolingo() {
+    function showDuolingo(){
       notif("Duolingo", "Your lesson is due.");
     }
 
-    function calmMode(tier) {
-      notif("Meditation", tier === 1 ? "Breathe in. Breathe out." : "You feel slightly less doomed.");
-      state.chaos = Math.max(0, state.chaos - 20 * tier);
-      document.body.style.filter = "saturate(0.85) brightness(1.05)";
-      setTimeout(() => { document.body.style.filter = "none"; }, 8000);
+    function calmMode(){
+      notif("Meditation", "Breathe in. Breathe out.");
+      state.chaos = Math.max(0, state.chaos - 18);
+      document.body.style.filter = "saturate(.84) brightness(1.04)";
+      setTimeout(() => document.body.style.filter = "none", 8000);
     }
 
-    function lootBox() {
-      const rewards = ["+50", "+200", "+500", "Crit boost", "2x speed", "Free stimulation"];
-      const got = rnd(rewards);
-      notif("Loot Box", "You got " + got + ".");
-      if (got.startsWith("+")) state.points += parseInt(got.slice(1), 10);
-      else if (got === "Crit boost") state.critical += 0.25;
-      else if (got === "2x speed") state.sps += 5;
-      else state.clickValue += 2;
-    }
-
-    function powerup() {
-      notif("Powerup", rnd(["X2 stimulation for 20 seconds.", "Click bonus active.", "SPS booster online."]));
-      state.multiplier += 0.5;
-      setTimeout(() => { state.multiplier = Math.max(1, state.multiplier - 0.5); }, 20000);
-    }
-
-    function skywriter() {
+    function twitchChat(){
       const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
-      d.style.left = "10%";
-      d.style.top = "8%";
-      d.style.fontSize = "18px";
-      d.style.fontWeight = "900";
-      d.textContent = "HELLO FROM THE SKY";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 10000);
-    }
-
-    function narrator() {
-      notif("Voice Narrator", "You are clicking the button.");
-      setTimeout(() => notif("Voice Narrator", "This is escalating quickly."), 2200);
-    }
-
-    function twitchChat() {
-      const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
-      d.style.right = "18px";
-      d.style.bottom = "90px";
-      d.style.width = "250px";
-      d.style.background = "rgba(17,17,17,.85)";
-      d.style.color = "#fff";
-      d.innerHTML = "chat: pog<br>chat: W<br>chat: no way<br>chat: keep clicking";
-      el("chaosLayer").appendChild(d);
+      d.className = "notif";
+      d.style.left = "18px";
+      d.style.right = "auto";
+      d.style.bottom = "18px";
+      d.style.top = "auto";
+      d.innerHTML = "<strong>chat</strong><small>pog<br>W<br>no way<br>keep clicking</small>";
+      document.body.appendChild(d);
       setTimeout(() => d.remove(), 12000);
     }
 
-    function wormhole() {
+    function wormhole(){
       const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
+      d.className = "notif";
       d.style.left = "50%";
       d.style.top = "50%";
+      d.style.right = "auto";
+      d.style.transform = "translate(-50%,-50%)";
       d.style.width = "320px";
       d.style.height = "320px";
       d.style.borderRadius = "50%";
-      d.style.transform = "translate(-50%,-50%)";
       d.style.background = "radial-gradient(circle, rgba(255,255,255,.95) 0, rgba(124,92,255,.8) 18%, rgba(0,212,255,.45) 40%, rgba(0,0,0,0) 72%)";
       d.style.filter = "blur(2px)";
       d.style.animation = "spin 1.6s linear infinite";
-      el("chaosLayer").appendChild(d);
+      document.body.appendChild(d);
       setTimeout(() => d.remove(), 12000);
     }
 
-    function reactionStream() {
-      const d = document.createElement("div");
-      d.className = "smallCard";
-      d.style.position = "absolute";
-      d.style.right = "18px";
-      d.style.top = "18px";
-      d.style.width = "230px";
-      d.innerHTML = "<strong>Reaction Stream</strong>WOW<br>NO WAY<br>INSANE";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 10000);
+    function startOceanEnding(){
+      state.ocean = true;
+      el("clicker").style.display = "none";
+      el("sidePanel").style.display = "none";
+      el("shell").classList.remove("show-side");
+      el("mainCard").classList.add("oceanMode");
+      el("title").textContent = "Go to the Ocean";
+      el("sub").textContent = "";
+      el("hint").style.display = "none";
+      el("app").style.background = "linear-gradient(180deg,#72d6ff 0%,#2a97de 38%,#0b5d9b 100%)";
+      el("oceanScene").style.opacity = "1";
+      el("oceanScene").style.pointerEvents = "auto";
+      const lines = [
+        "You made it to the ocean.",
+        "The chaos is gone.",
+        "Everything is quiet now.",
+        "Thanks for playing."
+      ];
+      el("credits").innerHTML = lines.map((t,i)=>`<div class="line" style="animation-delay:${i*.85}s">${t}</div>`).join("");
+      notif("Ending", "The screen has been calmed.");
+      log("Reached the ocean ending.");
+      save();
     }
 
-    function cryptoGraph() {
-      notif("Crypto", "The chart is doing something unwise.");
-    }
-
-    function leverageAlert() {
-      notif("Leverage", "This is probably a bad idea.");
-    }
-
-    function tamagotchiPet() {
-      notif("Tamagotchi", "It needs attention.");
-    }
-
-    function fitnessCoach() {
-      notif("Fitness Instructor", "ONE MORE REP.");
-    }
-
-    function currencyBurst() {
-      notif("Currency", "More fake money appeared.");
-    }
-
-    function renderShop() {
+    function renderShop(){
       const shop = el("shop");
       shop.innerHTML = "";
       UPGRADE_DEFS.forEach(def => {
         const [key, name, cost, desc] = def;
         const count = state.upgrades[key] || 0;
         const row = document.createElement("div");
-        row.className = "upgradeBox";
+        row.className = "upgrade";
         row.innerHTML = `
           <h3>${name}${count ? ` <span style="color:var(--muted);font-size:12px;">x${count}</span>` : ""}</h3>
           <p>${desc}</p>
@@ -1107,7 +1039,7 @@
       });
     }
 
-    function update() {
+    function update(){
       el("points").textContent = fmt(state.points);
       el("sps").textContent = fmt(state.sps * state.multiplier);
       el("level").textContent = state.level;
@@ -1117,130 +1049,151 @@
       el("overloadText").textContent =
         state.chaos < 20 ? "Barely anything is happening." :
         state.chaos < 45 ? "A few things are on the screen." :
-        state.chaos < 70 ? "The screen is becoming crowded." :
+        state.chaos < 70 ? "The page is getting crowded." :
         state.chaos < 90 ? "This is getting hard to look at." :
         "Peak overstimulation.";
-      el("caption").textContent = rnd(captions);
-      el("title").textContent = state.upgrades.tab ? "Stimulation Clicker" : "Overstimulated Clicker";
-      document.title = state.upgrades.tab ? "Stimulation: " + fmt(state.points) : "Overstimulated Clicker";
+      el("title").textContent = state.upgrades.tab ? "Stimulation Clicker" : "Stimulation";
+      document.title = state.upgrades.tab ? "Stimulation: " + fmt(state.points) : "Stimulation";
       el("soundBtn").textContent = "Sound: " + (state.sound ? "On" : "Off");
+      el("caption").textContent = rnd(captions);
 
       const badges = [];
-      if (state.upgrades.dvd) badges.push("DVDs " + state.upgrades.dvd);
-      if (state.upgrades.hydraulic) badges.push("Press " + state.upgrades.hydraulic);
-      if (state.upgrades.lofi) badges.push("Lofi");
-      if (state.upgrades.news) badges.push("News");
-      if (state.upgrades.loot) badges.push("Loot");
-      if (state.upgrades.ocean) badges.push("Ocean");
-      el("badges").innerHTML = badges.map(b => `<div class="badge">${b}</div>`).join("");
+      if(state.upgrades.dvd) badges.push("DVDs " + state.upgrades.dvd);
+      if(state.upgrades.hydraulic) badges.push("Press " + state.upgrades.hydraulic);
+      if(state.upgrades.lofi) badges.push("Lofi");
+      if(state.upgrades.news) badges.push("News");
+      if(state.upgrades.ocean) badges.push("Ocean");
+      el("badgeRow")?.remove();
+      const row = document.createElement("div");
+      row.className = "badgeRow";
+      row.id = "badgeRow";
+      row.innerHTML = badges.map(b => `<div class="badge">${b}</div>`).join("");
+      document.querySelector(".miniBar").appendChild(row);
 
       el("mainCard").classList.toggle("shake", state.chaos >= 85);
       el("logo").classList.toggle("spin", state.chaos >= 95);
 
-      if (state.upgrades.shop) {
-        el("sidePanel").classList.add("show");
-        el("sidePanel").style.display = "grid";
-      }
+      showSidePanelIfNeeded();
+      renderUnlocks();
+      renderShop();
+      if(state.level >= 3) el("shell").classList.add("show-side");
     }
 
-    function checkPanels() {
-      if (state.level >= 3) el("sidePanel").classList.add("show");
-      if (state.level >= 6) unlockPanel("Breaking News", "Alerts and distractions unlocked.");
-      if (state.level >= 12) unlockPanel("Lofi / Rain", "Calm noise layers unlocked.");
-      if (state.level >= 18) unlockPanel("Mini Overlays", "Screens begin to stack.");
-      if (state.level >= 25) unlockPanel("Internet Jungle", "Everything is now trying to get your attention.");
-    }
-
-    function tick() {
-      if (state.ocean) return;
-      const income = state.sps * state.multiplier;
-      if (income > 0) {
-        state.points += income;
-        state.xp += income;
-      }
-      state.chaos = Math.max(0, Math.min(100, state.chaos + (Math.random() < 0.4 ? 0.5 : 0)));
-
-      while (state.xp >= state.nextLevel) {
+    function addPoints(n){
+      if(state.ocean) return;
+      state.points += n;
+      state.xp += n;
+      state.totalClicks++;
+      while(state.xp >= state.nextLevel){
         state.xp -= state.nextLevel;
         state.level++;
         state.stage = Math.max(1, Math.floor(state.level / 3) + 1);
         state.nextLevel = Math.floor(state.nextLevel * 1.3 + 15);
         popup("Level up!");
       }
+      if(state.level >= 3) unlockSidePanel("The side panel appeared.");
+      if(state.level >= 12) el("shell").classList.add("show-side");
+      save();
+      update();
+    }
 
-      if (state.upgrades.dvd) moveDVDs();
-      if (state.upgrades.popcorn && Math.random() < 0.1) floater("🍿", "#ffd93d");
-      if (state.upgrades.thunder && Math.random() < 0.08) beep("chaos");
-      if (state.upgrades.mukbang && Math.random() < 0.08) notif("Mukbang", "Crunch crunch slurp.");
-      if (state.upgrades.crypto && Math.random() < 0.08) showStock();
-      if (state.upgrades.react && Math.random() < 0.08) reactionStream();
-      if (state.upgrades.screen && Math.random() < 0.12) notif("Screen Time", "Your screen time is now very high.");
-      checkPanels();
+    el("clicker").addEventListener("click", () => {
+      if(state.ocean) return;
+      const crit = Math.random() < 0.08;
+      const gain = Math.max(1, Math.floor((state.clickValue * state.multiplier) * (crit ? 3 : 1)));
+      addPoints(gain);
+      floater("+" + fmt(gain), crit ? "#ffcc00" : null);
+      beep("click");
+      if(crit) { notif("Critical Hit", "Big stimulation."); beep("chaos"); }
+      if(state.upgrades.news && Math.random() < 0.24) showNews();
+      if(state.upgrades.screen && Math.random() < 0.12) notif("Screen Time", "Your screen time is now very high.");
+      if(state.upgrades.subway) showSubway(state.upgrades.fullscreen);
+      if(state.upgrades.stock) showStock();
+      if(state.upgrades.duo) showDuolingo();
+      if(state.upgrades.twitch) twitchChat();
+      if(state.upgrades.wormhole) wormhole();
+      if(Math.random() < 0.14) flash();
+      if(Math.random() < 0.2) log("Clicked: " + rnd(["click", "tap", "press", "stimulate"]) + ".");
+      if(Math.random() < 0.1) popup(rnd(["W", "pog", "based", "unhinged", "no way"]));
+      if(state.upgrades.dvd) moveDVDs();
+      if(state.upgrades.hydraulic && Math.random() < 0.2) addHydraulic();
+      update();
+    });
+
+    function tick(){
+      if(state.ocean) return;
+      const income = state.sps * state.multiplier;
+      if(income > 0){
+        state.points += income;
+        state.xp += income;
+      }
+      state.chaos = Math.max(0, Math.min(100, state.chaos + (Math.random() < 0.4 ? 0.5 : 0)));
+      while(state.xp >= state.nextLevel){
+        state.xp -= state.nextLevel;
+        state.level++;
+        state.stage = Math.max(1, Math.floor(state.level / 3) + 1);
+        state.nextLevel = Math.floor(state.nextLevel * 1.3 + 15);
+        popup("Level up!");
+      }
+      if(state.upgrades.dvd) moveDVDs();
+      if(state.upgrades.lofi && Math.random() < 0.03) showOverlayTag("Lofi Beats");
+      if(state.upgrades.rain && Math.random() < 0.03) showOverlayTag("Rain Sounds");
+      if(state.upgrades.screen && Math.random() < 0.06) notif("Screen Time", "You have been here for a while.");
+      if(state.upgrades.news && Math.random() < 0.05) showNews();
+      renderUnlocks();
       update();
       save();
     }
 
-    function restart() {
+    el("saveBtn").addEventListener("click", save);
+    el("resetBtn").addEventListener("click", () => {
+      if(confirm("Reset everything?")) {
+        localStorage.removeItem(SAVE_KEY);
+        location.reload();
+      }
+    });
+    el("soundBtn").addEventListener("click", () => {
+      state.sound = !state.sound;
+      update();
+      save();
+    });
+    el("restartBtn").addEventListener("click", () => {
       localStorage.removeItem(SAVE_KEY);
       location.reload();
-    }
-
-    el("clicker").addEventListener("click", () => {
-      if (state.ocean) return;
-      state.totalClicks++;
-      const crit = Math.random() < 0.08;
-      const gain = Math.max(1, Math.floor((state.clickValue * state.multiplier) * (crit ? 3 : 1)));
-      state.points += gain;
-      state.xp += gain;
-      state.chaos = Math.min(100, state.chaos + 0.8);
-      if (state.upgrades.amount) floater("+" + fmt(gain), crit ? "#ffcc00" : null);
-      else if (gain >= 10) floater("+" + fmt(gain), crit ? "#ffcc00" : null);
-      beep("click");
-      if (crit) {
-        notif("Critical Hit", "Big stimulation.");
-        beep("chaos");
-      }
-      if (state.upgrades.news && Math.random() < 0.25) showNews();
-      if (state.upgrades.screen && Math.random() < 0.15) notif("Screen Time", "You have been on this site for too long.");
-      if (state.upgrades.dvd) moveDVDs();
-      if (Math.random() < 0.12) flash();
-      if (Math.random() < 0.2) log("Clicked: " + rnd(["click","tap","press","stimulate"]) + ".");
-      if (Math.random() < 0.1) popup(rnd(["W","pog","based","unhinged","no way"]));
-      if (state.upgrades.subway) showSubway(state.upgrades.fullscreen);
-      if (state.upgrades.stock) showStock();
-      if (state.upgrades.duo) showDuolingo();
-      if (state.upgrades.twitch) twitchChat();
-      if (state.upgrades.wormhole) wormhole();
-      if (state.upgrades.sky) skywriter();
-      if (state.upgrades.narrator) narrator();
-      if (state.upgrades.pinwheel) addPinwheel();
-      if (state.upgrades.leverage) leverageAlert();
-      if (state.upgrades.tamagotchi) tamagotchiPet();
-      if (state.upgrades.fit) fitnessCoach();
-      if (state.upgrades.currency) currencyBurst();
-      update();
     });
 
-    el("saveBtn").addEventListener("click", save);
-    el("resetBtn").addEventListener("click", resetGame);
-    el("soundBtn").addEventListener("click", () => { state.sound = !state.sound; update(); save(); });
-    el("restartBtn").addEventListener("click", restart);
-
-    const loaded = load();
-    if (loaded) {
-      notif("Loaded", "Saved progress restored.");
-      log("Save loaded.");
-    } else {
-      log("Welcome to Overstimulated Clicker.");
-      log("Click the button, and the screen will get louder.");
+    function showOverlayTag(text){
+      const d = document.createElement("div");
+      d.className = "notif";
+      d.style.left = "18px";
+      d.style.right = "auto";
+      d.style.top = "18px";
+      d.textContent = text;
+      document.body.appendChild(d);
+      setTimeout(() => {
+        d.style.transition = "opacity .35s ease, transform .35s ease";
+        d.style.opacity = "0";
+        d.style.transform = "translateX(-18px)";
+        setTimeout(() => d.remove(), 380);
+      }, 1800);
     }
 
-    if (state.upgrades.shop) el("sidePanel").classList.add("show");
+    const loaded = load();
+    if(loaded){
+      notif("Loaded", "Saved progress restored.");
+      log("Save loaded.");
+    }else{
+      log("Welcome to Stimulation Clicker.");
+      log("Click the button.");
+    }
+
     update();
     renderShop();
-    checkPanels();
+    renderUnlocks();
     setInterval(tick, 1000);
-    setInterval(renderShop, 1500);
+    setInterval(() => {
+      if(state.upgrades.tab) document.title = "Stimulation: " + fmt(state.points);
+    }, 1000);
   </script>
 </body>
 </html>
