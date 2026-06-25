@@ -7,21 +7,22 @@
   <style>
     :root{
       --bg:#081019;
-      --panel:rgba(14,18,27,.88);
-      --panel2:rgba(20,26,38,.92);
-      --text:#f6f8ff;
-      --muted:#a0a9bb;
+      --text:#f7f8fc;
+      --muted:#9ca7b8;
+      --panel:rgba(12,17,26,.86);
+      --panel2:rgba(18,24,36,.92);
+      --line:rgba(255,255,255,.08);
       --accent:#7c5cff;
       --accent2:#00d4ff;
       --good:#00e676;
       --warn:#ffcc00;
       --danger:#ff5c7a;
-      --line:rgba(255,255,255,.09);
       --shadow:0 24px 60px rgba(0,0,0,.45);
     }
     *{box-sizing:border-box}
     html,body{
-      margin:0;min-height:100%;
+      margin:0;
+      min-height:100%;
       background:
         radial-gradient(circle at top,#152033 0,#0a101a 50%,#05070a 100%);
       color:var(--text);
@@ -29,98 +30,259 @@
       overflow-x:hidden;
     }
     body::before{
-      content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.18;
       background-image:
         linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),
         linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);
       background-size:52px 52px;
       mask-image:radial-gradient(circle at center,black 34%,transparent 94%);
     }
-    .wrap{max-width:1320px;margin:0 auto;padding:22px;position:relative}
+    .wrap{
+      max-width:1320px;
+      margin:0 auto;
+      padding:22px;
+      position:relative;
+    }
     .topbar{
-      display:flex;justify-content:space-between;align-items:center;gap:16px;
-      flex-wrap:wrap;margin-bottom:16px
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
     }
     .brand{display:flex;align-items:center;gap:12px}
     .logo{
-      width:54px;height:54px;border-radius:16px;display:grid;place-items:center;
+      width:54px;height:54px;border-radius:16px;
+      display:grid;place-items:center;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
-      box-shadow:var(--shadow);font-size:26px
+      box-shadow:var(--shadow);
+      font-size:26px;
     }
-    h1{margin:0;font-size:clamp(24px,3.2vw,40px)}
-    .sub{margin:4px 0 0;color:var(--muted);font-size:14px}
-    .stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+    h1{
+      margin:0;
+      font-size:clamp(24px,3.2vw,40px);
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .stats{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+    }
     .chip{
-      padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);font-weight:800;backdrop-filter:blur(10px)
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:800;
+      backdrop-filter:blur(10px);
     }
-    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:start}
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr);
+      gap:18px;
+      align-items:start;
+    }
     .card{
-      background:var(--panel);border:1px solid rgba(255,255,255,.08);
-      border-radius:24px;box-shadow:var(--shadow);backdrop-filter:blur(14px)
+      background:var(--panel);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
     }
-    .main{padding:24px;min-height:640px;position:relative;overflow:hidden}
-    .side{padding:20px;display:grid;gap:14px}
-    .sectionTitle{margin:0 0 8px;font-size:18px}
+    .main{
+      padding:24px;
+      min-height:680px;
+      position:relative;
+      overflow:hidden;
+    }
     .memezone{
-      position:relative;display:grid;place-items:center;min-height:390px;
+      position:relative;
+      display:grid;
+      place-items:center;
+      min-height:410px;
     }
     .clicker{
-      width:min(74vw,340px);aspect-ratio:1/1;border:none;border-radius:34px;
-      cursor:pointer;user-select:none;font-weight:1000;
-      color:#111;font-size:clamp(42px,8vw,68px);
+      width:min(74vw,340px);
+      aspect-ratio:1/1;
+      border:none;
+      border-radius:34px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:1000;
+      color:#111;
+      font-size:clamp(42px,8vw,68px);
       background:linear-gradient(135deg,#ff6b6b,#ffb86b 55%,#ffd93d);
       box-shadow:0 18px 50px rgba(255,131,87,.45), inset 0 -10px 20px rgba(0,0,0,.15);
       transition:transform .08s ease,filter .2s ease;
     }
     .clicker:hover{filter:saturate(1.1) brightness(1.03)}
     .clicker:active{transform:scale(.97) rotate(-1deg)}
-    .caption{text-align:center;color:var(--muted);margin-top:14px;font-size:14px;min-height:20px}
-    .floaters,.chaosLayer,.dvdLayer,.notifLayer,.titleLayer{position:absolute;inset:0;pointer-events:none}
+    .caption{
+      text-align:center;
+      color:var(--muted);
+      margin-top:14px;
+      font-size:14px;
+      min-height:20px;
+    }
+    .floaters,.chaosLayer,.dvdLayer,.titleLayer,.notifLayer,.oceanLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
     .floater{
-      position:absolute;font-weight:900;font-size:18px;opacity:0;
-      animation:rise 1.05s ease-out forwards;text-shadow:0 2px 10px rgba(0,0,0,.35)
+      position:absolute;
+      font-weight:900;
+      font-size:18px;
+      opacity:0;
+      animation:rise 1.05s ease-out forwards;
+      text-shadow:0 2px 10px rgba(0,0,0,.35);
     }
     @keyframes rise{
       0%{transform:translateY(0) scale(.9);opacity:0}
       20%{opacity:1}
       100%{transform:translateY(-110px) scale(1.15);opacity:0}
     }
-    .upgrade{
-      display:flex;justify-content:space-between;align-items:center;gap:12px;
-      padding:14px;border-radius:18px;background:var(--panel2);border:1px solid rgba(255,255,255,.08)
-    }
-    .upgrade h3{margin:0;font-size:16px}
-    .upgrade p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
-    .buy{
-      border:none;border-radius:14px;padding:12px 14px;font-weight:900;
-      color:#08111b;background:linear-gradient(135deg,var(--accent2),#8cfffb);
-      cursor:pointer;min-width:122px
-    }
-    .buy:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
     .mini{
-      padding:16px;border-radius:20px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08)
+      padding:16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
     }
-    .bottomRow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-    .meter{height:14px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:10px}
-    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--good),var(--accent2));transition:width .16s ease}
-    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .bottomRow{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    .sectionTitle{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+    .meter{
+      height:14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--good),var(--accent2));
+      transition:width .16s ease;
+    }
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
     .badge{
-      padding:8px 10px;border-radius:999px;background:rgba(124,92,255,.18);
-      border:1px solid rgba(124,92,255,.35);font-size:12px
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(124,92,255,.18);
+      border:1px solid rgba(124,92,255,.35);
+      font-size:12px;
     }
-    .log{height:168px;overflow:auto;display:grid;gap:8px;padding-right:4px}
+
+    .side{
+      padding:20px;
+      display:none;
+      gap:14px;
+    }
+    .side.show{display:grid}
+    .upgradeBox{
+      padding:14px;
+      border-radius:18px;
+      background:var(--panel2);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .upgradeBox h3{
+      margin:0 0 4px;
+      font-size:16px;
+    }
+    .upgradeBox p{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+    .buy{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      color:#08111b;
+      background:linear-gradient(135deg,var(--accent2),#8cfffb);
+      cursor:pointer;
+    }
+    .buy:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      filter:grayscale(1);
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .ghost{
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .log{
+      height:200px;
+      overflow:auto;
+      display:grid;
+      gap:8px;
+      padding-right:4px;
+    }
     .entry{
-      font-size:13px;color:#d8e2f0;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px
+      font-size:13px;
+      color:#d8e2f0;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:10px 12px;
     }
-    .overlay{position:fixed;inset:0;pointer-events:none;z-index:20}
+    .overlay{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:20;
+    }
     .popup{
-      position:absolute;left:50%;top:12%;transform:translateX(-50%);
-      background:rgba(8,12,18,.92);border:1px solid rgba(255,255,255,.12);
-      color:white;padding:14px 18px;border-radius:18px;font-weight:900;
-      box-shadow:var(--shadow);opacity:0;animation:popup 2.4s ease forwards
+      position:absolute;
+      left:50%;
+      top:12%;
+      transform:translateX(-50%);
+      background:rgba(8,12,18,.92);
+      border:1px solid rgba(255,255,255,.12);
+      color:white;
+      padding:14px 18px;
+      border-radius:18px;
+      font-weight:900;
+      box-shadow:var(--shadow);
+      opacity:0;
+      animation:popup 2.4s ease forwards;
     }
     @keyframes popup{
       0%{opacity:0;transform:translateX(-50%) translateY(-10px)}
@@ -129,13 +291,35 @@
       100%{opacity:0;transform:translateX(-50%) translateY(-20px)}
     }
     .notif{
-      position:absolute;right:18px;top:18px;min-width:230px;max-width:340px;
-      background:rgba(18,24,35,.96);border:1px solid rgba(255,255,255,.09);
-      border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);animation:slidein .35s ease-out
+      position:absolute;
+      right:18px;
+      top:18px;
+      min-width:230px;
+      max-width:340px;
+      background:rgba(18,24,35,.96);
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:18px;
+      padding:14px 16px;
+      box-shadow:var(--shadow);
+      animation:slidein .35s ease-out;
     }
-    @keyframes slidein{from{transform:translateX(18px);opacity:0}to{transform:translateX(0);opacity:1}}
-    .notif small{display:block;color:var(--muted);margin-top:4px}
-    .screenFlash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:30}
+    @keyframes slidein{
+      from{transform:translateX(18px);opacity:0}
+      to{transform:translateX(0);opacity:1}
+    }
+    .notif small{
+      display:block;
+      color:var(--muted);
+      margin-top:4px;
+    }
+    .flash{
+      position:fixed;
+      inset:0;
+      background:#fff;
+      opacity:0;
+      pointer-events:none;
+      z-index:30;
+    }
     .shake{animation:shake .35s linear infinite}
     @keyframes shake{
       0%{transform:translate(0,0)}
@@ -147,42 +331,165 @@
     .spin{animation:spin 2.5s linear infinite}
     @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     .dvd{
-      position:absolute;width:86px;height:48px;border:3px solid white;border-radius:12px;
-      display:grid;place-items:center;font-weight:900;background:rgba(255,255,255,.07);
-      backdrop-filter:blur(6px);box-shadow:0 10px 25px rgba(0,0,0,.25)
+      position:absolute;
+      width:86px;
+      height:48px;
+      border:3px solid white;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      background:rgba(255,255,255,.07);
+      backdrop-filter:blur(6px);
+      box-shadow:0 10px 25px rgba(0,0,0,.25);
     }
-    .dvd span{font-size:16px;letter-spacing:.08em}
-    .wave{
-      position:absolute;left:0;right:0;bottom:0;height:30%;
-      background:linear-gradient(180deg,rgba(0,170,255,.18),rgba(0,120,220,.68));
-      transform:translateY(100%);
+    .dvd span{
+      font-size:16px;
+      letter-spacing:.08em;
     }
-    .oceanMode .wave{transform:translateY(0)}
-    .oceanMode{
-      background:radial-gradient(circle at top,#4abef9 0,#0c73bb 35%,#03437a 100%) !important;
-      color:#fff;
+    .sidePanel{
+      position:absolute;
+      top:0;
+      right:0;
+      width:320px;
+      height:100%;
+      background:rgba(9,13,20,.92);
+      border-left:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(10px);
+      transform:translateX(100%);
+      transition:transform .35s ease;
+      z-index:8;
+      padding:18px;
+      overflow:auto;
+    }
+    .sidePanel.show{transform:translateX(0)}
+    .panelTitle{
+      font-weight:900;
+      margin:0 0 10px;
+      font-size:18px;
+    }
+    .smallList{
+      display:grid;
+      gap:10px;
+    }
+    .smallCard{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:12px;
+      font-size:13px;
+      color:#dbe6f4;
+    }
+    .smallCard strong{display:block;margin-bottom:4px;color:#fff}
+    .oceanMode .main{
+      background:linear-gradient(180deg,#56c1ff 0%, #157dc4 35%, #07518a 100%) !important;
+    }
+    .oceanMode body{
+      background:linear-gradient(180deg,#56c1ff 0%, #157dc4 35%, #07518a 100%) !important;
+    }
+    .oceanScene{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .6s ease;
+    }
+    .oceanMode .oceanScene{opacity:1}
+    .oceanSky{
+      position:absolute;
+      inset:0 0 32% 0;
+      background:linear-gradient(180deg,#7dd3ff 0%,#4fc0ff 45%,#1e8dd1 100%);
+    }
+    .oceanSea{
+      position:absolute;
+      inset:auto 0 0 0;
+      height:40%;
+      background:linear-gradient(180deg,#2b92d8 0%,#0965a6 60%,#064d83 100%);
+      box-shadow:inset 0 18px 0 rgba(255,255,255,.08);
+    }
+    .oceanWave{
+      position:absolute;
+      bottom:24%;
+      left:-10%;
+      width:120%;
+      height:36px;
+      background:radial-gradient(circle at 20px 18px, rgba(255,255,255,.45) 0, rgba(255,255,255,.12) 28%, transparent 29%) 0 0/120px 36px repeat-x;
+      opacity:.8;
+      animation:wave 6s linear infinite;
+    }
+    @keyframes wave{
+      from{transform:translateX(0)}
+      to{transform:translateX(-120px)}
     }
     .oceanText{
-      position:absolute;inset:auto 0 20%;text-align:center;font-size:clamp(26px,4vw,46px);
-      font-weight:900;letter-spacing:.02em;color:white;text-shadow:0 4px 20px rgba(0,0,0,.45)
+      position:absolute;
+      left:0;right:0;
+      top:40%;
+      text-align:center;
+      font-size:clamp(26px,4vw,48px);
+      font-weight:900;
+      letter-spacing:.01em;
+      color:white;
+      text-shadow:0 4px 20px rgba(0,0,0,.4);
+      opacity:.98;
     }
-    .controls{display:flex;gap:10px;flex-wrap:wrap}
-    .ghost{
-      border:none;border-radius:14px;padding:12px 14px;font-weight:900;cursor:pointer;
-      background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.08)
+    .credits{
+      position:absolute;
+      left:50%;
+      top:56%;
+      transform:translateX(-50%);
+      text-align:center;
+      color:rgba(255,255,255,.88);
+      font-size:15px;
+      line-height:1.7;
+      max-width:520px;
+      width:min(92vw,520px);
     }
-    .shopGrid{display:grid;gap:10px}
-    @media (max-width:960px){
+    .credits .line{
+      opacity:0;
+      animation:fadeup 1s ease forwards;
+    }
+    @keyframes fadeup{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .endButtons{
+      position:absolute;
+      left:50%;
+      bottom:5%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      pointer-events:auto;
+    }
+    .endBtn{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      background:rgba(255,255,255,.16);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      backdrop-filter:blur(8px);
+    }
+    @media (max-width:980px){
       .grid{grid-template-columns:1fr}
       .stats{justify-content:flex-start}
       .bottomRow{grid-template-columns:1fr}
-      .main{min-height:560px}
+      .main{min-height:580px}
+      .sidePanel{position:fixed;top:auto;bottom:0;right:0;left:0;width:auto;height:42vh;transform:translateY(100%);border-left:none;border-top:1px solid rgba(255,255,255,.08)}
+      .sidePanel.show{transform:translateY(0)}
     }
   </style>
 </head>
 <body>
   <div class="overlay" id="overlay"></div>
-  <div class="screenFlash" id="flash"></div>
+  <div class="flash" id="flash"></div>
+
   <div class="wrap" id="app">
     <div class="topbar">
       <div class="brand">
@@ -205,13 +512,20 @@
           <div class="floaters" id="floaters"></div>
           <div class="chaosLayer" id="chaosLayer"></div>
           <div class="dvdLayer" id="dvdLayer"></div>
-          <div class="notifLayer" id="notifLayer"></div>
           <div class="titleLayer" id="titleLayer"></div>
+          <div class="oceanScene" id="oceanScene">
+            <div class="oceanSky"></div>
+            <div class="oceanSea"></div>
+            <div class="oceanWave"></div>
+            <div class="oceanText">Go to the Ocean</div>
+            <div class="credits" id="credits"></div>
+            <div class="endButtons">
+              <button class="endBtn" id="restartBtn">Restart</button>
+            </div>
+          </div>
           <button class="clicker" id="clicker">Click</button>
         </div>
         <div class="caption" id="caption">Click the button, you know you want to.</div>
-        <div class="wave" id="wave"></div>
-        <div class="oceanText" id="oceanText" style="display:none;">Go to the Ocean</div>
 
         <div class="bottomRow">
           <div class="mini">
@@ -228,10 +542,10 @@
         </div>
       </div>
 
-      <div class="card side">
+      <div class="card side" id="sidePanel">
         <div>
           <h2 class="sectionTitle">Upgrades</h2>
-          <div class="shopGrid" id="shop"></div>
+          <div id="shop"></div>
         </div>
 
         <div class="controls">
@@ -244,12 +558,15 @@
           <h2 class="sectionTitle">Activity Feed</h2>
           <div class="log" id="log"></div>
         </div>
+
+        <div id="unlockPanels" style="display:grid;gap:10px;"></div>
       </div>
     </div>
   </div>
 
   <script>
-    const SAVE_KEY = "overstimulated_clicker_save_v1";
+    const SAVE_KEY = "overstimulated_clicker_save_v2";
+
     const UPGRADE_DEFS = [
       ["dvd","Bouncing DVD",5,"Adds a bouncing DVD logo.",1],
       ["tab","Add Tab Title",5,"Adds stimulation to the browser title.",0],
@@ -262,10 +579,10 @@
       ["crit","Critical Hits",200,"Random clicks hit harder.",0],
       ["lofi","Lofi Beats",250,"Adds calm beats under the chaos.",0],
       ["rain","Rain Sounds",300,"Adds a rain ambience layer.",0],
-      ["pinwheel","Pinwheel",700,"Spinny thing for the corner.",0],
+      ["pinwheel","Pinwheel",700,"A spinny distraction appears.",0],
       ["hydraulic","Hydraulic Press",1000,"Presses things for stimulation.",1],
       ["achievements","Achievements",1500,"Shows achievement system.",0],
-      ["popcorn","Popcorn Animation",3500,"Popcorn starts popping.",0],
+      ["popcorn","Popcorn Animation",3500,"Adds a popping distraction.",0],
       ["thunder","Thunder Sounds",2000,"Thunder strikes occasionally.",0],
       ["slime","Slime",4000,"Adds slime goo to the screen.",0],
       ["tech","Technicolor",5000,"Makes everything more colorful.",0],
@@ -276,7 +593,7 @@
       ["autohydraulic","Auto Hydraulics",15000,"Hydraulic press runs by itself.",0],
       ["corner","Corner Hits",15000,"DVDs get corner hits.",0],
       ["ui","UI Upgrade",15000,"Polishes the interface a bit.",0],
-      ["shop","Item Shop",17500,"Unlocks a side item store feel.",0],
+      ["shop","Item Shop",17500,"Adds a secondary item panel.",0],
       ["loot","Loot Boxes",20000,"Adds loot box surprises.",0],
       ["button2","Button Upgrade II",25000,"Click button gets absurd.",1],
       ["stock","Stock Market",25000,"Adds fake stock ticker vibes.",0],
@@ -302,24 +619,10 @@
     ];
 
     const state = {
-      points: 0,
-      sps: 0,
-      clickValue: 1,
-      multiplier: 1,
-      critical: 1,
-      level: 1,
-      xp: 0,
-      nextLevel: 25,
-      stage: 1,
-      totalClicks: 0,
-      chaos: 0,
-      sound: true,
-      ocean: false,
-      upgrades: {},
-      counts: {
-        dvd: 0, hydraulic: 0, dvdspeed1: 0, dvdspeed2: 0
-      },
-      unlocked: {}
+      points: 0, sps: 0, clickValue: 1, multiplier: 1, critical: 1,
+      level: 1, xp: 0, nextLevel: 25, stage: 1, totalClicks: 0,
+      chaos: 0, sound: true, ocean: false,
+      upgrades: {}, unlocked: {}, counts: { dvd: 0, hydraulic: 0, dvdspeed1: 0, dvdspeed2: 0 }
     };
 
     const el = id => document.getElementById(id);
@@ -360,7 +663,7 @@
           g.gain.exponentialRampToValueAtTime(0.1, now + 0.02);
           g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
           o.start(now); o.stop(now + 0.2);
-        } else if (type === "chaos") {
+        } else {
           o.type = "triangle";
           o.frequency.setValueAtTime(160 + Math.random() * 120, now);
           g.gain.setValueAtTime(0.0001, now);
@@ -435,32 +738,75 @@
         const data = JSON.parse(raw);
         Object.assign(state, data);
         state.upgrades = state.upgrades || {};
+        state.unlocked = state.unlocked || {};
         state.counts = state.counts || { dvd: 0, hydraulic: 0, dvdspeed1: 0, dvdspeed2: 0 };
         return true;
       } catch { return false; }
     }
 
-    function reset() {
+    function resetGame() {
       if (!confirm("Reset everything?")) return;
       localStorage.removeItem(SAVE_KEY);
       location.reload();
     }
 
+    function startOcean() {
+      state.ocean = true;
+      document.body.style.overflow = "hidden";
+      el("app").classList.add("oceanMode");
+      el("clicker").style.display = "none";
+      el("sidePanel").style.display = "none";
+      el("sidePanel").classList.remove("show");
+      el("title").textContent = "Go to the Ocean";
+      el("sub").textContent = "";
+      el("caption").style.display = "none";
+      el("oceanScene").style.display = "block";
+      el("oceanScene").style.opacity = "1";
+      el("mainCard").classList.remove("shake");
+      el("logo").classList.remove("spin");
+      document.body.style.background = "linear-gradient(180deg,#7dd3ff 0%, #2c9ae2 38%, #0b5d9a 100%)";
+      const credits = [
+        "You made it to the ocean.",
+        "The screen is quiet now.",
+        "Thanks for playing.",
+        "Restart to disturb the peace again."
+      ];
+      el("credits").innerHTML = credits.map((t,i)=>`<div class="line" style="animation-delay:${i*.9}s">${t}</div>`).join("");
+      notif("Ending", "The chaos is over.");
+      log("Reached the ocean ending.");
+      save();
+    }
+
     function buy(key) {
       const def = UPGRADE_DEFS.find(x => x[0] === key);
-      if (!def) return;
-      if (state.points < def[2]) return;
+      if (!def || state.points < def[2] || state.ocean) return;
       state.points -= def[2];
       state.upgrades[key] = (state.upgrades[key] || 0) + 1;
       beep("buy");
       log("Bought " + def[1] + ".");
-      applyUpgrade(key, def[3], def[4]);
+      applyUpgrade(key);
+      if (key === "shop") {
+        unlockPanel("Item Shop", "A second panel unlocks.");
+      }
       update();
+      renderShop();
       save();
     }
 
-    function applyUpgrade(key, desc, multi) {
+    function unlockPanel(title, body) {
+      if (state.unlocked[title]) return;
+      state.unlocked[title] = true;
+      const box = document.createElement("div");
+      box.className = "smallCard";
+      box.innerHTML = "<strong>" + title + "</strong>" + body;
+      el("unlockPanels").appendChild(box);
+      el("sidePanel").classList.add("show");
+      el("sidePanel").style.display = "grid";
+    }
+
+    function applyUpgrade(key) {
       state.chaos = Math.min(100, state.chaos + 3);
+
       if (key === "dvd") {
         state.counts.dvd++;
         addDVD();
@@ -484,7 +830,7 @@
       if (key === "crime") showAmbient("True Crime Podcast");
       if (key === "screen") notif("Screen Time", "You have been on this site for too long.");
       if (key === "news") showNews();
-      if (key === "subway") showSubway();
+      if (key === "subway") showSubway(false);
       if (key === "fullscreen") showSubway(true);
       if (key === "stock") showStock();
       if (key === "duo") showDuolingo();
@@ -496,23 +842,34 @@
       if (key === "narrator") narrator();
       if (key === "twitch") twitchChat();
       if (key === "wormhole") wormhole();
-      if (key === "ocean") goOcean();
+      if (key === "ocean") startOcean();
       if (key === "achievements") log("Achievements unlocked.");
-      if (key === "tech") document.body.classList.add("tech");
+      if (key === "tech") document.body.style.filter = "saturate(1.15) contrast(1.02)";
+      if (key === "ui") el("mainCard").style.borderRadius = "28px";
+      if (key === "shop") {
+        el("sidePanel").classList.add("show");
+        el("sidePanel").style.display = "grid";
+      }
+      if (key === "corner") notif("Corner hit", "The DVD bounced again.");
+      if (key === "pinwheel") addPinwheel();
+      if (key === "react") reactionStream();
+      if (key === "crypto") cryptoGraph();
+      if (key === "leverage") leverageAlert();
+      if (key === "tamagotchi") tamagotchiPet();
+      if (key === "fit") fitnessCoach();
+      if (key === "currency") currencyBurst();
     }
 
     function showAmbient(name) {
       notif(name, "Ambient layer added.");
       const t = document.createElement("div");
-      t.className = "chaosItem";
-      t.style.left = "22px";
+      t.className = "smallCard";
+      t.style.position = "absolute";
+      t.style.left = "20px";
       t.style.bottom = "20px";
-      t.style.top = "auto";
-      t.style.color = "#fff";
-      t.style.fontWeight = "900";
-      t.style.fontSize = "13px";
-      t.textContent = name;
-      el("overlay").appendChild(t);
+      t.style.width = "220px";
+      t.textContent = name + " is now playing in the background.";
+      el("chaosLayer").appendChild(t);
       setTimeout(() => t.remove(), 8000);
     }
 
@@ -520,64 +877,98 @@
       const d = document.createElement("div");
       d.className = "dvd";
       d.innerHTML = "<span>DVD</span>";
-      const pad = 20;
-      d.style.left = (pad + Math.random() * 55) + "%";
-      d.style.top = (pad + Math.random() * 45) + "%";
+      d.style.left = (10 + Math.random() * 55) + "%";
+      d.style.top = (10 + Math.random() * 45) + "%";
       d.dataset.vx = (1.2 + Math.random() * 1.8) * (Math.random() < 0.5 ? -1 : 1);
       d.dataset.vy = (1.0 + Math.random() * 1.6) * (Math.random() < 0.5 ? -1 : 1);
-      d.dataset.tone = Math.random() * 360;
       el("dvdLayer").appendChild(d);
+    }
+
+    function moveDVDs() {
+      [...el("dvdLayer").children].forEach(d => {
+        const speedBoost = (state.upgrades.dvdspeed1 ? 1.35 : 1) * (state.upgrades.dvdspeed2 ? 1.9 : 1);
+        let x = parseFloat(d.style.left);
+        let y = parseFloat(d.style.top);
+        let vx = parseFloat(d.dataset.vx) * speedBoost;
+        let vy = parseFloat(d.dataset.vy) * speedBoost;
+        x += vx * 0.18;
+        y += vy * 0.18;
+        if (x < 1 || x > 85) {
+          vx *= -1;
+          if (state.upgrades.dvdsound) beep("chaos");
+        }
+        if (y < 1 || y > 75) {
+          vy *= -1;
+          if (state.upgrades.dvdsound) beep("chaos");
+        }
+        x = Math.max(1, Math.min(85, x));
+        y = Math.max(1, Math.min(75, y));
+        d.style.left = x + "%";
+        d.style.top = y + "%";
+        d.dataset.vx = vx;
+        d.dataset.vy = vy;
+      });
     }
 
     function addHydraulic() {
       const d = document.createElement("div");
-      d.className = "chaosItem";
+      d.className = "smallCard";
+      d.style.position = "absolute";
       d.style.left = "50%";
-      d.style.top = "42%";
+      d.style.top = "45%";
       d.style.transform = "translate(-50%,-50%)";
-      d.style.fontSize = "34px";
-      d.textContent = "⛓️⬇️⛓️";
+      d.style.fontSize = "14px";
+      d.style.fontWeight = "900";
+      d.textContent = "Hydraulic Press";
       el("chaosLayer").appendChild(d);
       setTimeout(() => d.remove(), 10000);
     }
 
     function showNews() {
       notif("Breaking News", "Something extremely online just happened.");
-      const d = document.createElement("div");
-      d.className = "chaosItem";
-      d.style.right = "18px";
-      d.style.bottom = "18px";
-      d.style.fontSize = "18px";
-      d.style.color = "#fff";
-      d.style.background = "rgba(0,0,0,.35)";
-      d.style.padding = "10px 12px";
-      d.style.borderRadius = "14px";
-      d.textContent = "LIVE: chaos intensifies";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 7000);
     }
 
     function showSubway(full=false) {
       const d = document.createElement("div");
-      d.className = "chaosItem";
+      d.className = "smallCard";
+      d.style.position = "absolute";
       d.style.left = "0";
       d.style.top = full ? "0" : "12%";
       d.style.width = "100%";
       d.style.height = full ? "100%" : "76px";
       d.style.display = "grid";
       d.style.placeItems = "center";
-      d.style.fontSize = full ? "44px" : "26px";
+      d.style.fontSize = full ? "36px" : "24px";
       d.style.fontWeight = "900";
-      d.style.color = "rgba(255,255,255,.85)";
+      d.style.color = "rgba(255,255,255,.9)";
       d.style.background = "linear-gradient(90deg, rgba(18,20,26,.88), rgba(36,42,60,.88))";
-      d.textContent = full ? "SUBWAY SURFERS FULLSCREEN" : "Subway Surfers";
+      d.textContent = full ? "Subway Surfers" : "Subway Surfers";
       el("chaosLayer").appendChild(d);
       setTimeout(() => d.remove(), full ? 12000 : 8000);
+      if (full) el("sidePanel").classList.add("show");
+    }
+
+    function addPinwheel() {
+      const d = document.createElement("div");
+      d.className = "smallCard";
+      d.style.position = "absolute";
+      d.style.right = "18px";
+      d.style.top = "18px";
+      d.style.width = "80px";
+      d.style.height = "80px";
+      d.style.borderRadius = "50%";
+      d.style.display = "grid";
+      d.style.placeItems = "center";
+      d.style.animation = "spin 1.8s linear infinite";
+      d.textContent = "✺";
+      el("chaosLayer").appendChild(d);
+      setTimeout(() => d.remove(), 10000);
     }
 
     function showStock() {
       const d = document.createElement("div");
-      d.className = "chaosItem";
+      d.className = "smallCard";
+      d.style.position = "absolute";
       d.style.left = "18px";
       d.style.top = "18px";
       d.style.padding = "10px 12px";
@@ -592,17 +983,6 @@
 
     function showDuolingo() {
       notif("Duolingo", "Your lesson is due.");
-      const d = document.createElement("div");
-      d.className = "chaosItem";
-      d.style.right = "18px";
-      d.style.top = "90px";
-      d.style.padding = "12px 14px";
-      d.style.borderRadius = "16px";
-      d.style.background = "rgba(43, 194, 83, .92)";
-      d.style.color = "#fff";
-      d.textContent = "Practice your Spanish";
-      el("chaosLayer").appendChild(d);
-      setTimeout(() => d.remove(), 8000);
     }
 
     function calmMode(tier) {
@@ -613,7 +993,7 @@
     }
 
     function lootBox() {
-      const rewards = ["+50", "+200", "+500", "Crit boost", "2x speed", "Free meme"];
+      const rewards = ["+50", "+200", "+500", "Crit boost", "2x speed", "Free stimulation"];
       const got = rnd(rewards);
       notif("Loot Box", "You got " + got + ".");
       if (got.startsWith("+")) state.points += parseInt(got.slice(1), 10);
@@ -630,12 +1010,12 @@
 
     function skywriter() {
       const d = document.createElement("div");
-      d.className = "chaosItem";
+      d.className = "smallCard";
+      d.style.position = "absolute";
       d.style.left = "10%";
       d.style.top = "8%";
-      d.style.fontSize = "22px";
+      d.style.fontSize = "18px";
       d.style.fontWeight = "900";
-      d.style.color = "white";
       d.textContent = "HELLO FROM THE SKY";
       el("chaosLayer").appendChild(d);
       setTimeout(() => d.remove(), 10000);
@@ -648,13 +1028,12 @@
 
     function twitchChat() {
       const d = document.createElement("div");
-      d.className = "chaosItem";
+      d.className = "smallCard";
+      d.style.position = "absolute";
       d.style.right = "18px";
       d.style.bottom = "90px";
       d.style.width = "250px";
-      d.style.padding = "12px";
-      d.style.borderRadius = "16px";
-      d.style.background = "rgba(17,17,17,.8)";
+      d.style.background = "rgba(17,17,17,.85)";
       d.style.color = "#fff";
       d.innerHTML = "chat: pog<br>chat: W<br>chat: no way<br>chat: keep clicking";
       el("chaosLayer").appendChild(d);
@@ -663,7 +1042,8 @@
 
     function wormhole() {
       const d = document.createElement("div");
-      d.className = "chaosItem";
+      d.className = "smallCard";
+      d.style.position = "absolute";
       d.style.left = "50%";
       d.style.top = "50%";
       d.style.width = "320px";
@@ -677,19 +1057,57 @@
       setTimeout(() => d.remove(), 12000);
     }
 
-    function goOcean() {
-      state.ocean = true;
-      el("app").classList.add("oceanMode");
-      el("wave").style.display = "block";
-      el("oceanText").style.display = "block";
-      el("clicker").textContent = "Calm";
-      el("clicker").disabled = true;
-      notif("Go to the Ocean", "The chaos is over.");
-      log("You reached the ocean ending.");
-      document.body.style.filter = "none";
+    function reactionStream() {
+      const d = document.createElement("div");
+      d.className = "smallCard";
+      d.style.position = "absolute";
+      d.style.right = "18px";
+      d.style.top = "18px";
+      d.style.width = "230px";
+      d.innerHTML = "<strong>Reaction Stream</strong>WOW<br>NO WAY<br>INSANE";
+      el("chaosLayer").appendChild(d);
+      setTimeout(() => d.remove(), 10000);
     }
 
-    function updateUI() {
+    function cryptoGraph() {
+      notif("Crypto", "The chart is doing something unwise.");
+    }
+
+    function leverageAlert() {
+      notif("Leverage", "This is probably a bad idea.");
+    }
+
+    function tamagotchiPet() {
+      notif("Tamagotchi", "It needs attention.");
+    }
+
+    function fitnessCoach() {
+      notif("Fitness Instructor", "ONE MORE REP.");
+    }
+
+    function currencyBurst() {
+      notif("Currency", "More fake money appeared.");
+    }
+
+    function renderShop() {
+      const shop = el("shop");
+      shop.innerHTML = "";
+      UPGRADE_DEFS.forEach(def => {
+        const [key, name, cost, desc] = def;
+        const count = state.upgrades[key] || 0;
+        const row = document.createElement("div");
+        row.className = "upgradeBox";
+        row.innerHTML = `
+          <h3>${name}${count ? ` <span style="color:var(--muted);font-size:12px;">x${count}</span>` : ""}</h3>
+          <p>${desc}</p>
+          <button class="buy" ${state.points < cost || state.ocean ? "disabled" : ""}>Buy <span>${fmt(cost)}</span></button>
+        `;
+        row.querySelector("button").addEventListener("click", () => buy(key));
+        shop.appendChild(row);
+      });
+    }
+
+    function update() {
       el("points").textContent = fmt(state.points);
       el("sps").textContent = fmt(state.sps * state.multiplier);
       el("level").textContent = state.level;
@@ -704,8 +1122,7 @@
         "Peak overstimulation.";
       el("caption").textContent = rnd(captions);
       el("title").textContent = state.upgrades.tab ? "Stimulation Clicker" : "Overstimulated Clicker";
-      if (state.upgrades.tab) document.title = "Stimulation: " + fmt(state.points);
-      else document.title = "Overstimulated Clicker";
+      document.title = state.upgrades.tab ? "Stimulation: " + fmt(state.points) : "Overstimulated Clicker";
       el("soundBtn").textContent = "Sound: " + (state.sound ? "On" : "Off");
 
       const badges = [];
@@ -717,51 +1134,55 @@
       if (state.upgrades.ocean) badges.push("Ocean");
       el("badges").innerHTML = badges.map(b => `<div class="badge">${b}</div>`).join("");
 
-      if (state.upgrades.achievements) checkAchievements();
       el("mainCard").classList.toggle("shake", state.chaos >= 85);
       el("logo").classList.toggle("spin", state.chaos >= 95);
+
+      if (state.upgrades.shop) {
+        el("sidePanel").classList.add("show");
+        el("sidePanel").style.display = "grid";
+      }
     }
 
-    function updateShop() {
-      const shop = el("shop");
-      shop.innerHTML = "";
-      UPGRADE_DEFS.forEach(def => {
-        const [key, name, cost, desc] = def;
-        if (key === "ocean" && state.points < 2000000 && !state.upgrades.ocean) {
-          // still show it later; no special handling
-        }
-        const row = document.createElement("div");
-        row.className = "upgrade";
-        const count = state.upgrades[key] || 0;
-        row.innerHTML = `
-          <div>
-            <h3>${name}${count ? ` <span style="color:var(--muted);font-size:12px;">x${count}</span>` : ""}</h3>
-            <p>${desc}</p>
-          </div>
-          <button class="buy" ${state.points < cost ? "disabled" : ""}>Buy <span>${fmt(cost)}</span></button>
-        `;
-        row.querySelector("button").addEventListener("click", () => buy(key));
-        shop.appendChild(row);
-      });
+    function checkPanels() {
+      if (state.level >= 3) el("sidePanel").classList.add("show");
+      if (state.level >= 6) unlockPanel("Breaking News", "Alerts and distractions unlocked.");
+      if (state.level >= 12) unlockPanel("Lofi / Rain", "Calm noise layers unlocked.");
+      if (state.level >= 18) unlockPanel("Mini Overlays", "Screens begin to stack.");
+      if (state.level >= 25) unlockPanel("Internet Jungle", "Everything is now trying to get your attention.");
     }
 
-    function checkAchievements() {
-      const ach = [];
-      if (state.totalClicks >= 1 && !state.unlocked.a1) ach.push(["a1","First Click"]);
-      if (state.totalClicks >= 100 && !state.unlocked.a100) ach.push(["a100","Click Cadet"]);
-      if (state.level >= 10 && !state.unlocked.l10) ach.push(["l10","Level Up"]);
-      if (state.level >= 25 && !state.unlocked.l25) ach.push(["l25","Leveler"]);
-      if ((state.upgrades.dvd || 0) >= 5 && !state.unlocked.d5) ach.push(["d5","Disc Collector"]);
-      if (state.upgrades.loot >= 1 && !state.unlocked.loot) ach.push(["loot","Loot Finder"]);
-      if ((state.upgrades.hydraulic || 0) >= 1 && !state.unlocked.hyd) ach.push(["hyd","Hydraulic Enthusiast"]);
-      if (state.points >= 1000000 && !state.unlocked.million) ach.push(["million","iPad Kid"]);
-      if (state.upgrades.ocean && !state.unlocked.ocean) ach.push(["ocean","Calm Ending"]);
-      ach.forEach(([id,name]) => {
-        state.unlocked[id] = true;
-        popup("Achievement: " + name);
-        notif("Achievement unlocked", name);
-        log("Achievement unlocked: " + name);
-      });
+    function tick() {
+      if (state.ocean) return;
+      const income = state.sps * state.multiplier;
+      if (income > 0) {
+        state.points += income;
+        state.xp += income;
+      }
+      state.chaos = Math.max(0, Math.min(100, state.chaos + (Math.random() < 0.4 ? 0.5 : 0)));
+
+      while (state.xp >= state.nextLevel) {
+        state.xp -= state.nextLevel;
+        state.level++;
+        state.stage = Math.max(1, Math.floor(state.level / 3) + 1);
+        state.nextLevel = Math.floor(state.nextLevel * 1.3 + 15);
+        popup("Level up!");
+      }
+
+      if (state.upgrades.dvd) moveDVDs();
+      if (state.upgrades.popcorn && Math.random() < 0.1) floater("🍿", "#ffd93d");
+      if (state.upgrades.thunder && Math.random() < 0.08) beep("chaos");
+      if (state.upgrades.mukbang && Math.random() < 0.08) notif("Mukbang", "Crunch crunch slurp.");
+      if (state.upgrades.crypto && Math.random() < 0.08) showStock();
+      if (state.upgrades.react && Math.random() < 0.08) reactionStream();
+      if (state.upgrades.screen && Math.random() < 0.12) notif("Screen Time", "Your screen time is now very high.");
+      checkPanels();
+      update();
+      save();
+    }
+
+    function restart() {
+      localStorage.removeItem(SAVE_KEY);
+      location.reload();
     }
 
     el("clicker").addEventListener("click", () => {
@@ -772,21 +1193,19 @@
       state.points += gain;
       state.xp += gain;
       state.chaos = Math.min(100, state.chaos + 0.8);
-      state.level = Math.max(1, state.level);
-      state.stage = Math.max(1, Math.floor(state.level / 3) + 1);
-      if (gain >= 10) floater("+" + fmt(gain), crit ? "#ffcc00" : null);
+      if (state.upgrades.amount) floater("+" + fmt(gain), crit ? "#ffcc00" : null);
+      else if (gain >= 10) floater("+" + fmt(gain), crit ? "#ffcc00" : null);
       beep("click");
-      if (state.upgrades.amount) floater("+" + fmt(gain));
       if (crit) {
         notif("Critical Hit", "Big stimulation.");
         beep("chaos");
       }
       if (state.upgrades.news && Math.random() < 0.25) showNews();
-      if (state.upgrades.screen && Math.random() < 0.15) notif("Screen Time", "Your screen time is now very high.");
+      if (state.upgrades.screen && Math.random() < 0.15) notif("Screen Time", "You have been on this site for too long.");
       if (state.upgrades.dvd) moveDVDs();
       if (Math.random() < 0.12) flash();
-      if (Math.random() < 0.2) log("Clicked: " + rnd(["click", "tap", "press", "stimulate"]) + ".");
-      if (Math.random() < 0.1) popup(rnd(["W", "pog", "based", "unhinged", "no way"]));
+      if (Math.random() < 0.2) log("Clicked: " + rnd(["click","tap","press","stimulate"]) + ".");
+      if (Math.random() < 0.1) popup(rnd(["W","pog","based","unhinged","no way"]));
       if (state.upgrades.subway) showSubway(state.upgrades.fullscreen);
       if (state.upgrades.stock) showStock();
       if (state.upgrades.duo) showDuolingo();
@@ -794,73 +1213,18 @@
       if (state.upgrades.wormhole) wormhole();
       if (state.upgrades.sky) skywriter();
       if (state.upgrades.narrator) narrator();
+      if (state.upgrades.pinwheel) addPinwheel();
+      if (state.upgrades.leverage) leverageAlert();
+      if (state.upgrades.tamagotchi) tamagotchiPet();
+      if (state.upgrades.fit) fitnessCoach();
+      if (state.upgrades.currency) currencyBurst();
       update();
     });
 
-    function moveDVDs() {
-      const layer = el("dvdLayer");
-      [...layer.children].forEach((d, i) => {
-        const speedBoost = (state.upgrades.dvdspeed1 ? 1.35 : 1) * (state.upgrades.dvdspeed2 ? 1.9 : 1);
-        let x = parseFloat(d.style.left);
-        let y = parseFloat(d.style.top);
-        let vx = parseFloat(d.dataset.vx) * speedBoost;
-        let vy = parseFloat(d.dataset.vy) * speedBoost;
-        x += vx * 0.18;
-        y += vy * 0.18;
-        if (x < 1 || x > 85) {
-          vx *= -1;
-          if (state.upgrades.corner) popup("Corner hit!");
-          if (state.upgrades.dvdsound) beep("chaos");
-        }
-        if (y < 1 || y > 75) {
-          vy *= -1;
-          if (state.upgrades.dvdsound) beep("chaos");
-        }
-        x = Math.max(1, Math.min(85, x));
-        y = Math.max(1, Math.min(75, y));
-        d.style.left = x + "%";
-        d.style.top = y + "%";
-        d.dataset.vx = vx;
-        d.dataset.vy = vy;
-      });
-    }
-
-    function tick() {
-      const income = state.sps * state.multiplier;
-      if (income > 0) {
-        state.points += income;
-        state.xp += income;
-      }
-      state.chaos = Math.max(0, Math.min(100, state.chaos + (Math.random() < 0.4 ? 0.5 : 0)));
-      while (state.xp >= state.nextLevel) {
-        state.xp -= state.nextLevel;
-        state.level++;
-        state.stage = Math.max(1, Math.floor(state.level / 3) + 1);
-        state.nextLevel = Math.floor(state.nextLevel * 1.3 + 15);
-        popup("Level up!");
-      }
-      if (state.upgrades.dvd) moveDVDs();
-      if (state.upgrades.popcorn && Math.random() < 0.1) floater("🍿", "#ffd93d");
-      if (state.upgrades.thunder && Math.random() < 0.08) beep("chaos");
-      if (state.upgrades.mukbang && Math.random() < 0.08) notif("Mukbang", "Crunch crunch slurp.");
-      if (state.upgrades.crypto && Math.random() < 0.08) showStock();
-      if (state.upgrades.reaction && Math.random() < 0.08) notif("Reaction stream", "WOW");
-      update();
-      save();
-    }
-
-    function renderUpgradeEffects() {
-      if (state.upgrades.tech) document.body.style.filter = "saturate(1.15) contrast(1.02)";
-      if (state.upgrades.slime) document.body.style.background = "radial-gradient(circle at top,#1b2a1f 0,#0a101a 50%,#05070a 100%)";
-      if (state.upgrades.rain) notif("Rain sounds", "Soft rain is now playing in your imagination.");
-      if (state.upgrades.lofi) notif("Lofi beats", "The music is now oddly calming.");
-    }
-
-    function autosave() { save(); setTimeout(autosave, 12000); }
-
     el("saveBtn").addEventListener("click", save);
-    el("resetBtn").addEventListener("click", reset);
+    el("resetBtn").addEventListener("click", resetGame);
     el("soundBtn").addEventListener("click", () => { state.sound = !state.sound; update(); save(); });
+    el("restartBtn").addEventListener("click", restart);
 
     const loaded = load();
     if (loaded) {
@@ -868,14 +1232,15 @@
       log("Save loaded.");
     } else {
       log("Welcome to Overstimulated Clicker.");
+      log("Click the button, and the screen will get louder.");
     }
 
-    updateShop();
+    if (state.upgrades.shop) el("sidePanel").classList.add("show");
     update();
-    renderUpgradeEffects();
+    renderShop();
+    checkPanels();
     setInterval(tick, 1000);
-    setInterval(updateShop, 1500);
-    autosave();
+    setInterval(renderShop, 1500);
   </script>
 </body>
 </html>
